@@ -1280,45 +1280,29 @@ button,input,select,textarea{font:inherit;color:inherit}
           <h3>Para qual turma é o interesse?</h3>
           <p class="q__help">Selecione o ano ou série que seu filho vai cursar em 2026.</p>
 
+          <!-- Turmas do segmento Infantil ao 5º Ano, produto ZH+.
+               data-uni lista as unidades que oferecem cada turma, separadas por "|".
+               Fonte: TURMAS/form-zh-todas-unidades-turmas.xlsx. -->
           <div class="group">
             <span class="group__label">Educação Infantil</span>
             <div class="chips">
-              <button type="button" class="chip" data-val="Infantil N1" data-advance>Infantil N1</button>
-              <button type="button" class="chip" data-val="Infantil N2" data-advance>Infantil N2</button>
-              <button type="button" class="chip" data-val="Infantil N3" data-advance>Infantil N3</button>
-              <button type="button" class="chip" data-val="Infantil N4" data-advance>Infantil N4</button>
-              <button type="button" class="chip" data-val="Infantil N5" data-advance>Infantil N5</button>
+              <button type="button" class="chip" data-val="Infantil N1" data-uni="Icaraí" data-advance>Infantil N1</button>
+              <button type="button" class="chip" data-val="Infantil N2" data-uni="Icaraí" data-advance>Infantil N2</button>
+              <button type="button" class="chip" data-val="Infantil N3" data-uni="Icaraí" data-advance>Infantil N3</button>
+              <button type="button" class="chip" data-val="Infantil N4" data-uni="Icaraí" data-advance>Infantil N4</button>
+              <button type="button" class="chip" data-val="Infantil N5" data-uni="Icaraí" data-advance>Infantil N5</button>
             </div>
           </div>
 
           <div class="group">
             <span class="group__label">Fundamental · Anos iniciais</span>
             <div class="chips">
-              <button type="button" class="chip" data-val="1º Ano - Ensino Fundamental Anos Iniciais" data-advance>1º ano</button>
-              <button type="button" class="chip" data-val="2º Ano - Ensino Fundamental Anos Iniciais" data-advance>2º ano</button>
-              <button type="button" class="chip" data-val="3º Ano - Ensino Fundamental Anos Iniciais" data-advance>3º ano</button>
-              <button type="button" class="chip" data-val="4º Ano - Ensino Fundamental Anos Iniciais" data-advance>4º ano</button>
-              <button type="button" class="chip" data-val="5º Ano - Ensino Fundamental Anos Iniciais" data-advance>5º ano</button>
-            </div>
-          </div>
-
-          <div class="group">
-            <span class="group__label">Fundamental · Anos finais</span>
-            <div class="chips">
-              <button type="button" class="chip" data-val="6º Ano - Ensino Fundamental Anos Finais" data-advance>6º ano</button>
-              <button type="button" class="chip" data-val="7º Ano - Ensino Fundamental Anos Finais" data-advance>7º ano</button>
-              <button type="button" class="chip" data-val="8º Ano - Ensino Fundamental Anos Finais" data-advance>8º ano</button>
-              <button type="button" class="chip" data-val="9º Ano - Ensino Fundamental Anos Finais" data-advance>9º ano</button>
-            </div>
-          </div>
-
-          <div class="group">
-            <span class="group__label">Ensino Médio</span>
-            <div class="chips">
-              <button type="button" class="chip" data-val="1ª Série - Ensino Médio" data-advance>1ª série</button>
-              <button type="button" class="chip" data-val="2ª Série - Ensino Médio" data-advance>2ª série</button>
-              <button type="button" class="chip" data-val="3ª Série - Ensino Médio" data-advance>3ª série</button>
-              <button type="button" class="chip" data-val="Pré-Vestibular" data-advance>Pré-Vestibular</button>
+              <button type="button" class="chip" data-val="1º Ano - Ensino Fundamental Anos Iniciais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>1º ano</button>
+              <button type="button" class="chip" data-val="2º Ano - Ensino Fundamental Anos Iniciais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>2º ano</button>
+              <button type="button" class="chip" data-val="3º Ano - Ensino Fundamental Anos Iniciais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>3º ano</button>
+              <button type="button" class="chip" data-val="4º Ano - Ensino Fundamental Anos Iniciais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>4º ano</button>
+              <button type="button" class="chip" data-val="5º Ano - Ensino Fundamental Anos Iniciais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>5º ano</button>
+              <button type="button" class="chip" data-val="5º Ano - Especializado" data-uni="Méier" data-advance>5º ano · Especializado</button>
             </div>
           </div>
           <p class="err" id="err-turma"><svg aria-hidden="true"><use href="#alert"/></svg> Selecione a turma de interesse.</p>
@@ -1596,11 +1580,29 @@ button,input,select,textarea{font:inherit;color:inherit}
 
   function focusStep() {
     const el = stepAt(idx);
-    const target = el.querySelector('.inp, .opt, .chip, #i-consent');
+    const target = [...el.querySelectorAll('.inp, .opt, .chip, #i-consent')].find(t => !t.hidden);
     if (target && window.innerWidth > 720) {
       target.focus({ preventScroll: true });
     }
     body.scrollTop = 0;
+  }
+
+  /* Nem toda unidade oferece todas as turmas: a Educação Infantil existe
+     somente em Icaraí, e o 5º Ano Especializado somente no Méier. Cada chip
+     declara em data-uni onde é oferecido, e aqui escondemos o que não se
+     aplica à unidade escolhida, junto com os grupos que ficarem vazios. */
+  function filterTurmas() {
+    const uni = data.unidade;
+    const sec = $('.q[data-step="turma"]');
+    $$('.chip', sec).forEach(chip => {
+      const ok = !uni || (chip.dataset.uni || '').split('|').includes(uni);
+      chip.hidden = !ok;
+      if (!ok && chip.getAttribute('aria-pressed') === 'true') {
+        chip.setAttribute('aria-pressed', 'false');
+        if (data.turma === chip.dataset.val) delete data.turma;
+      }
+    });
+    $$('.group', sec).forEach(g => { g.hidden = !$$('.chip', g).some(c => !c.hidden); });
   }
 
   function show(i, dir = 1) {
@@ -1611,6 +1613,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     el.setAttribute('data-active', '');
     void el.offsetWidth;
     el.classList.add(dir >= 0 ? 'enter' : 'enter-back');
+    if (nameAt(i) === 'turma') filterTurmas();
     paint();
     focusStep();
   }
