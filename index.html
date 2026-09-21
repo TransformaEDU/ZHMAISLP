@@ -1,0 +1,1838 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cadastro Infantil — Colégio ZH+ | Agende sua visita</title>
+<meta name="description" content="Agende uma visita ao Colégio ZH+ e conheça de perto o lugar onde seu filho vai aprender, crescer e ser feliz. Unidades Icaraí, Méier e Vila Isabel. Matrículas 2026 abertas.">
+<meta name="theme-color" content="#0F5C5C">
+<meta property="og:title" content="Cadastro Infantil — Colégio ZH+">
+<meta property="og:description" content="Inovação que inspira, excelência que transforma. Agende sua visita.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   COLÉGIO ZH+ — SISTEMA DE DESIGN
+   Tokens · Tipografia · Motion · Componentes
+   ============================================================ */
+
+:root{
+  /* — Marca ZH+ (amostradas do site oficial) — */
+  --teal:            #229494;
+  --teal-bright:     #2BC9C9;
+  --teal-deep:       #0F5C5C;
+  --teal-abyss:      #073E3E;
+  --mint:            #00DFC2;
+  --cyan:            #90F4F4;
+  --lime:            #B2FE02;
+  --butter:          #F1EE73;
+  --gold:            #D5D123;
+
+  /* — Neutros quentes — */
+  --ink:             #121716;
+  --ink-soft:        #333333;
+  --ink-mute:        #5B6664;
+  --cream:           #FBFAF4;
+  --cream-2:         #F4F2E9;
+  --paper:           #FFFFFF;
+  --line:            color-mix(in srgb, var(--teal-deep) 12%, transparent);
+  --line-strong:     color-mix(in srgb, var(--teal-deep) 22%, transparent);
+
+  /* — Tipografia — */
+  --font-display: 'Outfit', 'Usual', 'Poppins', system-ui, sans-serif;
+  --font-body:    'Poppins', 'Outfit', system-ui, sans-serif;
+
+  --t-xs:   clamp(.68rem, .66rem + .1vw, .74rem);
+  --t-sm:   clamp(.8rem, .78rem + .12vw, .88rem);
+  --t-base: clamp(.95rem, .9rem + .22vw, 1.06rem);
+  --t-lg:   clamp(1.1rem, 1rem + .45vw, 1.32rem);
+  --t-xl:   clamp(1.35rem, 1.15rem + .9vw, 1.85rem);
+  --t-2xl:  clamp(1.8rem, 1.35rem + 2vw, 3rem);
+  --t-3xl:  clamp(2.4rem, 1.5rem + 4vw, 5rem);
+  --t-4xl:  clamp(3rem, 1.4rem + 7vw, 8.5rem);
+
+  /* — Ritmo espacial — */
+  --gut: clamp(1.15rem, 4vw, 2.5rem);
+  --sec: clamp(5.5rem, 11vw, 10.5rem);
+  --shell: 1220px;
+
+  /* — Raios concêntricos — */
+  --r-shell: 2.25rem;
+  --r-core:  1.75rem;
+  --r-sm:    1rem;
+  --r-pill:  999px;
+
+  /* — Sombras difusas e quentes (nunca duras) — */
+  --sh-1: 0 1px 2px rgba(12,52,50,.04), 0 8px 24px -12px rgba(12,52,50,.14);
+  --sh-2: 0 2px 4px rgba(12,52,50,.05), 0 24px 56px -28px rgba(12,52,50,.30);
+  --sh-3: 0 4px 8px rgba(12,52,50,.06), 0 48px 100px -40px rgba(12,52,50,.42);
+  --sh-teal: 0 20px 46px -22px color-mix(in srgb, var(--teal) 65%, transparent);
+  --inner-lite: inset 0 1px 1px rgba(255,255,255,.7);
+  --inner-dark: inset 0 1px 1px rgba(255,255,255,.14);
+
+  /* — Curvas de motion (nunca ease-in-out padrão) — */
+  --out:    cubic-bezier(.23,1,.32,1);
+  --inout:  cubic-bezier(.77,0,.175,1);
+  --drawer: cubic-bezier(.32,.72,0,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+
+  --focus: 0 0 0 3px var(--cream), 0 0 0 6px color-mix(in srgb, var(--teal) 55%, transparent);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:hidden}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+
+body{
+  margin:0;
+  font-family:var(--font-body);
+  font-size:var(--t-base);
+  line-height:1.65;
+  color:var(--ink-soft);
+  background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body.is-locked{overflow:hidden}
+
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);margin:0;line-height:1.02;letter-spacing:-.035em;font-weight:600}
+p{margin:0}
+img{max-width:100%;display:block}
+/* Ícones via <use> não carregam viewBox próprio: largura E altura sempre explícitas */
+svg{display:block;width:1em;height:1em;flex:none}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:none;box-shadow:var(--focus);border-radius:.6rem}
+
+/* — Grão de filme fixo (nunca em container que rola) — */
+.grain{
+  position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.032;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.shell{width:100%;max-width:var(--shell);margin-inline:auto;padding-inline:var(--gut)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============================================================
+   TIPOGRAFIA EDITORIAL
+   ============================================================ */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--font-display);
+  font-size:var(--t-xs);font-weight:600;text-transform:uppercase;letter-spacing:.2em;
+  padding:.45rem .9rem .45rem .65rem;border-radius:var(--r-pill);
+  background:color-mix(in srgb, var(--teal) 9%, transparent);
+  color:var(--teal-deep);
+  border:1px solid color-mix(in srgb, var(--teal) 18%, transparent);
+}
+.eyebrow.on-dark{background:rgba(255,255,255,.09);color:var(--cyan);border-color:rgba(255,255,255,.16)}
+.eyebrow .spark{width:.85em;height:.85em;flex:none}
+
+.h-display{font-size:var(--t-3xl);font-weight:600;letter-spacing:-.045em}
+.h-sec{font-size:var(--t-2xl);font-weight:600;letter-spacing:-.04em}
+.lede{font-size:var(--t-lg);color:var(--ink-mute);font-weight:300;line-height:1.55;max-width:56ch}
+.ital{font-family:var(--font-display);font-style:italic;font-weight:300}
+
+/* Realce de texto com traço orgânico */
+.mark{position:relative;display:inline-block;color:var(--teal-deep)}
+.mark::after{
+  content:'';position:absolute;left:-.08em;right:-.08em;bottom:.06em;height:.36em;z-index:-1;
+  background:linear-gradient(100deg, var(--butter), var(--lime));
+  border-radius:.4em;transform:scaleX(0);transform-origin:left;
+  transition:transform 900ms var(--out) 240ms;
+}
+.reveal.in .mark::after, .in .mark::after{transform:scaleX(1)}
+
+/* ============================================================
+   BOTÕES — arquitetura ilha / botão-dentro-de-botão
+   ============================================================ */
+.btn{
+  --bg: var(--teal-deep); --fg: #fff; --nest: rgba(255,255,255,.16);
+  display:inline-flex;align-items:center;gap:.85rem;
+  padding:.55rem .55rem .55rem 1.55rem;
+  background:var(--bg);color:var(--fg);
+  border:0;border-radius:var(--r-pill);cursor:pointer;
+  font-family:var(--font-display);font-weight:600;font-size:var(--t-base);letter-spacing:-.015em;
+  box-shadow:var(--sh-teal), var(--inner-dark);
+  transition:transform 220ms var(--out), box-shadow 320ms var(--out), background-color 320ms var(--out);
+  will-change:transform;
+}
+.btn__nest{
+  width:2.4rem;height:2.4rem;flex:none;border-radius:var(--r-pill);
+  background:var(--nest);display:grid;place-items:center;
+  transition:transform 320ms var(--out), background-color 320ms var(--out);
+}
+.btn__nest svg{width:1.05rem;height:1.05rem;transition:transform 320ms var(--out)}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{transform:translateY(-2px);box-shadow:0 28px 54px -20px color-mix(in srgb, var(--teal) 75%, transparent), var(--inner-dark)}
+  .btn:hover .btn__nest{background:var(--lime);transform:scale(1.06)}
+  .btn:hover .btn__nest svg{transform:translate(2px,-2px);color:var(--ink)}
+}
+.btn:active{transform:scale(.975) translateY(0)}
+.btn--lime{--bg:var(--lime);--fg:var(--ink);--nest:rgba(9,30,28,.10);box-shadow:0 20px 44px -22px color-mix(in srgb, var(--lime) 70%, transparent), var(--inner-lite)}
+@media (hover:hover) and (pointer:fine){ .btn--lime:hover .btn__nest{background:var(--teal-deep);color:#fff} }
+.btn--ghost{--bg:transparent;--fg:var(--ink);--nest:color-mix(in srgb, var(--teal) 12%, transparent);box-shadow:inset 0 0 0 1px var(--line-strong)}
+@media (hover:hover) and (pointer:fine){ .btn--ghost:hover{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-1)} }
+.btn--sm{font-size:var(--t-sm);padding:.4rem .4rem .4rem 1.15rem}
+.btn--sm .btn__nest{width:1.95rem;height:1.95rem}
+.btn--block{width:100%;justify-content:space-between}
+
+/* ============================================================
+   NAV — ilha flutuante de vidro
+   ============================================================ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;padding-top:clamp(.8rem,2vw,1.4rem);pointer-events:none}
+.nav__inner{
+  pointer-events:auto;
+  width:min(100% - 2*var(--gut), var(--shell));margin-inline:auto;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.5rem .5rem .5rem 1.35rem;border-radius:var(--r-pill);
+  background:color-mix(in srgb, var(--cream) 78%, transparent);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5), var(--sh-1);
+  transition:box-shadow 400ms var(--out), background-color 400ms var(--out), transform 400ms var(--out);
+}
+.nav.scrolled .nav__inner{box-shadow:inset 0 0 0 1px rgba(255,255,255,.55), var(--sh-2)}
+.nav__logo{display:flex;align-items:center;gap:.6rem;flex:none}
+.nav__logo svg{height:1.05rem;width:8.03rem;fill:var(--teal-deep);transition:fill 300ms var(--out)}
+.nav__links{display:flex;align-items:center;gap:.25rem}
+.nav__links a{
+  font-family:var(--font-display);font-size:var(--t-sm);font-weight:500;color:var(--ink-soft);
+  padding:.5rem .85rem;border-radius:var(--r-pill);position:relative;
+  transition:color 260ms var(--out), background-color 260ms var(--out);
+}
+@media (hover:hover) and (pointer:fine){ .nav__links a:hover{color:var(--teal-deep);background:color-mix(in srgb, var(--teal) 8%, transparent)} }
+.nav__cta{display:flex;align-items:center;gap:.5rem}
+
+.burger{
+  display:none;width:2.85rem;height:2.85rem;border-radius:var(--r-pill);border:0;cursor:pointer;
+  background:var(--teal-deep);position:relative;flex:none;
+  transition:transform 220ms var(--out), background-color 300ms var(--out);
+}
+.burger:active{transform:scale(.94)}
+.burger i{
+  position:absolute;left:50%;top:50%;width:1.05rem;height:1.6px;border-radius:2px;background:#fff;
+  transition:transform 420ms var(--drawer), opacity 200ms var(--out);
+}
+.burger i:nth-child(1){transform:translate(-50%,-5px)}
+.burger i:nth-child(2){transform:translate(-50%,0)}
+.burger i:nth-child(3){transform:translate(-50%,5px)}
+.burger[aria-expanded="true"] i:nth-child(1){transform:translate(-50%,0) rotate(45deg)}
+.burger[aria-expanded="true"] i:nth-child(2){opacity:0;transform:translate(-50%,0) scaleX(.3)}
+.burger[aria-expanded="true"] i:nth-child(3){transform:translate(-50%,0) rotate(-45deg)}
+
+.menu{
+  position:fixed;inset:0;z-index:59;pointer-events:none;opacity:0;
+  background:color-mix(in srgb, var(--teal-abyss) 88%, transparent);
+  -webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);
+  display:grid;place-items:center;
+  transition:opacity 420ms var(--out);
+}
+.menu.open{opacity:1;pointer-events:auto}
+.menu ul{list-style:none;margin:0;padding:0;text-align:center;display:grid;gap:.4rem}
+.menu a{
+  font-family:var(--font-display);font-size:clamp(2rem,9vw,3.4rem);font-weight:500;letter-spacing:-.045em;color:#fff;
+  display:block;padding:.2rem 0;
+  opacity:0;transform:translateY(2.5rem);
+  transition:opacity 520ms var(--out), transform 620ms var(--drawer), color 240ms var(--out);
+}
+.menu.open a{opacity:1;transform:translateY(0)}
+.menu.open li:nth-child(1) a{transition-delay:80ms}
+.menu.open li:nth-child(2) a{transition-delay:130ms}
+.menu.open li:nth-child(3) a{transition-delay:180ms}
+.menu.open li:nth-child(4) a{transition-delay:230ms}
+.menu.open li:nth-child(5) a{transition-delay:280ms}
+@media (hover:hover) and (pointer:fine){ .menu a:hover{color:var(--lime)} }
+
+@media (max-width:900px){
+  .nav__links{display:none}
+  .nav__cta .btn{display:none}
+  .burger{display:block}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;padding-top:clamp(7.5rem,16vw,11rem);padding-bottom:var(--sec);overflow:clip}
+.hero__bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5}
+.orb--1{width:44vw;height:44vw;background:var(--cyan);top:-14vw;right:-10vw}
+.orb--2{width:34vw;height:34vw;background:var(--butter);bottom:-6vw;left:-12vw;opacity:.55}
+.orb--3{width:22vw;height:22vw;background:var(--mint);top:38%;left:36%;opacity:.28}
+.hero__grid{
+  display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(2rem,5vw,4.5rem);align-items:center;
+}
+.hero__copy{position:relative;z-index:2}
+.hero h1{font-size:clamp(2.1rem,4.15vw,3.4rem);margin:1.35rem 0 0;font-weight:600;letter-spacing:-.048em}
+.hero h1 .ln{display:block;overflow:hidden;white-space:nowrap}
+.hero h1 .ln span{display:block;transform:translateY(105%);transition:transform 1050ms var(--drawer)}
+.hero.in h1 .ln span{transform:translateY(0)}
+.hero.in h1 .ln:nth-child(2) span{transition-delay:70ms}
+.hero.in h1 .ln:nth-child(3) span{transition-delay:140ms}
+.hero__lede{margin-top:1.5rem;max-width:46ch}
+.hero__actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2.2rem;align-items:center}
+.hero__units{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:2.6rem;font-size:var(--t-sm);color:var(--ink-mute)}
+.unit-chip{
+  display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .8rem;border-radius:var(--r-pill);
+  background:var(--paper);box-shadow:inset 0 0 0 1px var(--line), var(--sh-1);
+  font-family:var(--font-display);font-weight:500;color:var(--ink);font-size:var(--t-sm);
+}
+.unit-chip::before{content:'';width:.42rem;height:.42rem;border-radius:50%;background:var(--teal-bright)}
+
+/* Retrato com dupla moldura (double-bezel) */
+.portrait{
+  position:relative;padding:.55rem;border-radius:var(--r-shell);
+  background:color-mix(in srgb, var(--paper) 70%, transparent);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.65), var(--sh-3);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.portrait__core{
+  position:relative;border-radius:calc(var(--r-shell) - .55rem);overflow:hidden;
+  background:linear-gradient(165deg, var(--cyan), var(--teal-bright) 55%, var(--teal) 100%);
+  aspect-ratio:4/4.3;
+  box-shadow:var(--inner-lite);
+}
+.portrait__core img{width:100%;height:100%;object-fit:cover;object-position:center 18%;
+  transform:scale(1.02);transition:transform 1.4s var(--out)}
+@media (hover:hover) and (pointer:fine){ .portrait:hover .portrait__core img{transform:scale(1.06)} }
+.portrait .spark-deco{position:absolute;fill:var(--lime);filter:drop-shadow(0 6px 18px rgba(0,0,0,.14))}
+.portrait .spark-deco--a{width:4.5rem;height:4.5rem;top:-1.4rem;left:-1.4rem;animation:twirl 14s linear infinite}
+.portrait .spark-deco--b{width:2.4rem;height:2.4rem;bottom:8%;right:-1rem;fill:var(--butter);animation:twirl 9s linear infinite reverse}
+@keyframes twirl{to{transform:rotate(360deg)}}
+
+/* Cartão flutuante de prova */
+.float-card{
+  position:absolute;left:-1.5rem;bottom:6%;z-index:3;
+  padding:.4rem;border-radius:var(--r-core);
+  background:color-mix(in srgb, var(--paper) 82%, transparent);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6), var(--sh-2);
+  animation:bob 6s var(--inout) infinite;
+}
+.float-card__core{
+  background:var(--paper);border-radius:calc(var(--r-core) - .4rem);padding:.9rem 1.15rem;
+  display:flex;align-items:center;gap:.75rem;box-shadow:var(--inner-lite);
+}
+.float-card b{font-family:var(--font-display);font-size:1.35rem;color:var(--teal-deep);display:block;line-height:1}
+.float-card small{font-size:var(--t-xs);color:var(--ink-mute);letter-spacing:.02em}
+.float-card__ico{width:2.4rem;height:2.4rem;border-radius:var(--r-pill);background:color-mix(in srgb,var(--lime) 30%, transparent);display:grid;place-items:center;flex:none}
+.float-card__ico svg{width:1.2rem;height:1.2rem;fill:var(--teal-deep)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+@media (max-width:920px){
+  .hero h1 .ln{white-space:normal;overflow:visible}
+  .hero h1 .ln span{transform:none;opacity:0;transition:opacity 700ms var(--out)}
+  .hero.in h1 .ln span{opacity:1}
+  .hero__grid{grid-template-columns:1fr;gap:3rem}
+  .hero__visual{order:-1;max-width:26rem;margin-inline:auto;width:100%}
+  .float-card{left:-.5rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .float-card,.spark-deco--a,.spark-deco--b{animation:none}
+}
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+.marquee{
+  background:var(--teal-deep);color:#fff;padding:1.1rem 0;overflow:hidden;
+  transform:rotate(-1.15deg) scale(1.04);margin-block:clamp(2rem,6vw,4rem);
+  box-shadow:var(--sh-2);
+}
+.marquee__track{display:flex;width:max-content;animation:slide 38s linear infinite}
+.marquee:hover .marquee__track{animation-play-state:paused}
+.marquee span{
+  font-family:var(--font-display);font-weight:600;font-size:clamp(1rem,2.1vw,1.45rem);
+  letter-spacing:-.02em;text-transform:uppercase;padding-inline:1.1rem;display:flex;align-items:center;gap:1.5rem;white-space:nowrap;
+}
+.marquee svg{width:1.05rem;height:1.05rem;fill:var(--lime);flex:none}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){ .marquee__track{animation:none} }
+
+/* ============================================================
+   SEÇÕES GENÉRICAS
+   ============================================================ */
+.sec{padding-block:var(--sec);position:relative}
+.sec--paper{background:var(--paper)}
+.sec--dark{background:var(--teal-abyss);color:color-mix(in srgb,#fff 78%, transparent)}
+.sec--dark h2,.sec--dark h3{color:#fff}
+.sec__head{max-width:62ch;margin-bottom:clamp(2.5rem,6vw,4.5rem)}
+.sec__head .h-sec{margin-top:1.15rem}
+.sec__head .lede{margin-top:1.15rem}
+
+/* Reveal de scroll */
+.reveal{opacity:0;transform:translateY(2.6rem);filter:blur(6px);
+  transition:opacity 850ms var(--out), transform 950ms var(--drawer), filter 700ms var(--out)}
+.reveal.in{opacity:1;transform:none;filter:blur(0)}
+.reveal[data-d="1"]{transition-delay:70ms}
+.reveal[data-d="2"]{transition-delay:140ms}
+.reveal[data-d="3"]{transition-delay:210ms}
+.reveal[data-d="4"]{transition-delay:280ms}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;filter:none;transition:none}
+  .hero h1 .ln span{transform:none}
+}
+
+/* ============================================================
+   CICLOS — abas interativas
+   ============================================================ */
+.cycles__tabs{
+  display:flex;gap:.3rem;padding:.35rem;border-radius:var(--r-pill);
+  background:color-mix(in srgb, var(--teal-deep) 6%, transparent);
+  box-shadow:inset 0 0 0 1px var(--line);
+  position:relative;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+}
+.cycles__tabs::-webkit-scrollbar{display:none}
+.cycles__ind{
+  position:absolute;top:.35rem;bottom:.35rem;left:0;width:0;border-radius:var(--r-pill);
+  background:var(--teal-deep);box-shadow:var(--sh-teal), var(--inner-dark);
+  transition:transform 520ms var(--drawer), width 520ms var(--drawer);
+  z-index:0;
+}
+.cycles__tab{
+  position:relative;z-index:1;border:0;background:transparent;cursor:pointer;
+  padding:.7rem 1.35rem;border-radius:var(--r-pill);white-space:nowrap;
+  font-family:var(--font-display);font-weight:600;font-size:var(--t-sm);color:var(--ink-soft);
+  transition:color 320ms var(--out), transform 200ms var(--out);
+}
+.cycles__tab[aria-selected="true"]{color:#fff}
+.cycles__tab:active{transform:scale(.97)}
+
+.cycles__stage{margin-top:clamp(2rem,4vw,3rem);position:relative}
+.cycle{
+  display:none;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;
+}
+.cycle[data-active]{display:grid}
+.cycle.anim .cycle__txt,.cycle.anim .cycle__art{animation:cyIn 620ms var(--out) both}
+.cycle.anim .cycle__art{animation-delay:60ms}
+@keyframes cyIn{from{opacity:0;transform:translateY(1.6rem);filter:blur(7px)}to{opacity:1;transform:none;filter:blur(0)}}
+.cycle__age{
+  font-family:var(--font-display);font-size:var(--t-xs);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--teal);display:block;margin-bottom:.7rem;
+}
+.cycle h3{font-size:var(--t-2xl);letter-spacing:-.04em}
+.cycle p{margin-top:1.1rem;font-size:var(--t-lg);font-weight:300;color:var(--ink-mute);line-height:1.55}
+.cycle__list{list-style:none;margin:1.9rem 0 0;padding:0;display:grid;gap:.65rem}
+.cycle__list li{display:flex;gap:.7rem;align-items:flex-start;font-size:var(--t-sm)}
+.cycle__list svg{width:.95rem;height:.95rem;flex:none;fill:var(--teal);margin-top:.32rem}
+.cycle__art{
+  position:relative;padding:.5rem;border-radius:var(--r-shell);
+  background:var(--paper);box-shadow:inset 0 0 0 1px var(--line), var(--sh-2);
+}
+.cycle__art .core{
+  border-radius:calc(var(--r-shell) - .5rem);aspect-ratio:5/4;overflow:hidden;position:relative;
+  display:grid;place-items:center;box-shadow:var(--inner-lite);
+}
+.cycle__art .core img{width:100%;height:100%;object-fit:cover}
+.cycle__art .glyph{font-family:var(--font-display);font-size:clamp(4rem,13vw,8rem);font-weight:700;color:rgba(255,255,255,.9);letter-spacing:-.06em;line-height:1;text-shadow:0 20px 50px rgba(0,0,0,.14)}
+@media (max-width:820px){ .cycle{grid-template-columns:1fr} .cycle__art{order:-1} }
+
+/* ============================================================
+   BENTO — diferenciais
+   ============================================================ */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(.8rem,1.6vw,1.35rem)}
+.tile{
+  padding:.5rem;border-radius:var(--r-shell);
+  background:color-mix(in srgb, var(--paper) 60%, transparent);
+  box-shadow:inset 0 0 0 1px var(--line), var(--sh-1);
+  transition:transform 480ms var(--out), box-shadow 480ms var(--out);
+}
+.tile__core{
+  height:100%;border-radius:calc(var(--r-shell) - .5rem);padding:clamp(1.5rem,3vw,2.4rem);
+  background:var(--paper);box-shadow:var(--inner-lite);display:flex;flex-direction:column;gap:.85rem;
+  position:relative;overflow:hidden;
+}
+@media (hover:hover) and (pointer:fine){
+  .tile:hover{transform:translateY(-4px);box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-2)}
+}
+.tile--a{grid-column:span 7}
+.tile--b{grid-column:span 5}
+.tile--c{grid-column:span 5}
+.tile--d{grid-column:span 7}
+.tile--teal .tile__core{background:var(--teal-deep);color:rgba(255,255,255,.8);box-shadow:var(--inner-dark)}
+.tile--teal h3{color:#fff}
+.tile--lime .tile__core{background:var(--butter);box-shadow:var(--inner-lite)}
+.tile__ico{width:3rem;height:3rem;border-radius:var(--r-sm);display:grid;place-items:center;flex:none;
+  background:color-mix(in srgb, var(--teal) 10%, transparent)}
+.tile--teal .tile__ico{background:rgba(255,255,255,.12)}
+.tile--lime .tile__ico{background:rgba(9,30,28,.09)}
+.tile__ico svg{width:1.35rem;height:1.35rem;fill:var(--teal-deep)}
+.tile--teal .tile__ico svg{fill:var(--lime)}
+.tile h3{font-size:var(--t-xl);letter-spacing:-.035em}
+.tile p{font-size:var(--t-sm);color:var(--ink-mute)}
+.tile--teal p{color:rgba(255,255,255,.7)}
+.tile--lime p{color:color-mix(in srgb, var(--ink) 72%, transparent)}
+.tile__deco{position:absolute;right:-2rem;bottom:-2.5rem;width:9rem;height:9rem;opacity:.09;fill:currentColor;pointer-events:none}
+@media (max-width:860px){ .tile--a,.tile--b,.tile--c,.tile--d{grid-column:span 12} }
+
+/* ============================================================
+   UNIDADES
+   ============================================================ */
+.units{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.9rem,2vw,1.5rem)}
+.unit{
+  padding:.5rem;border-radius:var(--r-shell);background:rgba(255,255,255,.05);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);
+  transition:transform 480ms var(--out), box-shadow 480ms var(--out), background-color 480ms var(--out);
+  display:flex;
+}
+.unit__core{
+  flex:1;border-radius:calc(var(--r-shell) - .5rem);padding:clamp(1.4rem,2.6vw,2rem);
+  background:rgba(255,255,255,.04);box-shadow:var(--inner-dark);
+  display:flex;flex-direction:column;gap:1rem;align-items:flex-start;
+}
+@media (hover:hover) and (pointer:fine){
+  .unit:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 40px 80px -40px rgba(0,0,0,.6)}
+}
+.unit__n{font-family:var(--font-display);font-size:var(--t-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);opacity:.8}
+.unit h3{font-size:var(--t-xl)}
+.unit p{font-size:var(--t-sm);color:rgba(255,255,255,.62);flex:1}
+.unit .btn{margin-top:.4rem}
+@media (max-width:820px){ .units{grid-template-columns:1fr} }
+
+/* ============================================================
+   PASSOS
+   ============================================================ */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2.4vw,2rem);counter-reset:s}
+.step{position:relative;padding-top:2.6rem}
+.step::before{
+  counter-increment:s;content:counter(s,decimal-leading-zero);
+  position:absolute;top:0;left:0;font-family:var(--font-display);font-size:var(--t-sm);font-weight:700;
+  color:var(--teal);letter-spacing:.1em;
+}
+.step::after{content:'';position:absolute;top:.55rem;left:2.6rem;right:0;height:1px;background:var(--line)}
+.step:last-child::after{display:none}
+.step h3{font-size:var(--t-lg);margin-bottom:.6rem}
+.step p{font-size:var(--t-sm);color:var(--ink-mute)}
+@media (max-width:760px){ .steps{grid-template-columns:1fr;gap:2rem} .step::after{display:none} }
+
+/* ============================================================
+   PARCEIROS
+   ============================================================ */
+.partners{display:flex;flex-wrap:wrap;gap:clamp(.8rem,2vw,1.4rem);align-items:stretch;justify-content:center}
+.partner{
+  padding:.4rem;border-radius:var(--r-core);background:var(--paper);
+  box-shadow:inset 0 0 0 1px var(--line), var(--sh-1);
+  transition:transform 420ms var(--out), box-shadow 420ms var(--out);
+  flex:1 1 190px;max-width:250px;
+}
+.partner__core{border-radius:calc(var(--r-core) - .4rem);overflow:hidden;background:#fff;display:grid;place-items:center;height:100%;padding:.35rem}
+.partner img{width:100%;height:auto;object-fit:contain;filter:saturate(.9)}
+@media (hover:hover) and (pointer:fine){ .partner:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-2)} }
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq{display:grid;gap:.6rem;max-width:56rem;margin-inline:auto}
+.qa{
+  border-radius:var(--r-core);background:var(--paper);
+  box-shadow:inset 0 0 0 1px var(--line);
+  transition:box-shadow 380ms var(--out), background-color 380ms var(--out);
+  overflow:hidden;
+}
+.qa[open]{box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-1)}
+.qa summary{
+  cursor:pointer;list-style:none;padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;
+  font-family:var(--font-display);font-weight:500;font-size:var(--t-base);color:var(--ink);
+  transition:color 240ms var(--out);
+}
+.qa summary::-webkit-details-marker{display:none}
+.qa__plus{width:1.9rem;height:1.9rem;border-radius:var(--r-pill);flex:none;display:grid;place-items:center;
+  background:color-mix(in srgb, var(--teal) 9%, transparent);position:relative;
+  transition:background-color 300ms var(--out), transform 420ms var(--drawer)}
+.qa__plus::before,.qa__plus::after{content:'';position:absolute;background:var(--teal-deep);border-radius:2px;
+  transition:transform 420ms var(--drawer), opacity 240ms var(--out)}
+.qa__plus::before{width:.7rem;height:1.5px}
+.qa__plus::after{width:1.5px;height:.7rem}
+.qa[open] .qa__plus{background:var(--teal-deep);transform:rotate(90deg)}
+.qa[open] .qa__plus::before,.qa[open] .qa__plus::after{background:#fff}
+.qa[open] .qa__plus::after{opacity:0;transform:scaleY(.2)}
+.qa__body{padding:0 1.5rem 1.4rem;font-size:var(--t-sm);color:var(--ink-mute);max-width:62ch}
+
+/* ============================================================
+   CTA FINAL + FOOTER
+   ============================================================ */
+.finale{position:relative;overflow:clip;background:var(--teal-deep);border-radius:clamp(1.75rem,4vw,3rem);padding:clamp(2.5rem,7vw,5.5rem);text-align:center;color:#fff;box-shadow:var(--sh-3)}
+.finale::before{content:'';position:absolute;width:60%;aspect-ratio:1;border-radius:50%;background:var(--teal-bright);filter:blur(90px);opacity:.45;top:-25%;left:-10%}
+.finale::after{content:'';position:absolute;width:42%;aspect-ratio:1;border-radius:50%;background:var(--lime);filter:blur(110px);opacity:.13;bottom:-34%;right:-10%}
+.finale > *{position:relative;z-index:1}
+.finale h2{font-size:var(--t-2xl);color:#fff;max-width:22ch;margin-inline:auto}
+.finale p{margin:1.2rem auto 2.2rem;color:rgba(255,255,255,.72);max-width:48ch}
+
+.foot{padding-block:clamp(3rem,7vw,5rem) 2.5rem;background:var(--cream-2)}
+.foot__grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.5rem;align-items:start}
+.foot__logo{display:block}
+.foot__logo svg{height:1.4rem;width:10.7rem;fill:var(--teal-deep)}
+.foot h4{font-family:var(--font-display);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.18em;color:var(--ink-mute);margin-bottom:1rem;font-weight:600}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem;font-size:var(--t-sm)}
+.foot a{transition:color 240ms var(--out)}
+@media (hover:hover) and (pointer:fine){ .foot a:hover{color:var(--teal-deep)} }
+.foot__bar{margin-top:3rem;padding-top:1.6rem;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;font-size:var(--t-xs);color:var(--ink-mute)}
+@media (max-width:760px){ .foot__grid{grid-template-columns:1fr;gap:2rem} }
+
+/* ============================================================
+   MODAL — formulário passo a passo
+   ============================================================ */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:clamp(.75rem,3vw,2rem);
+  pointer-events:none;visibility:hidden}
+.modal.open{pointer-events:auto;visibility:visible}
+.modal__scrim{
+  position:absolute;inset:0;background:color-mix(in srgb, var(--teal-abyss) 72%, transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  opacity:0;transition:opacity 380ms var(--out);
+}
+.modal.open .modal__scrim{opacity:1}
+
+.sheet{
+  position:relative;width:min(100%, 46rem);max-height:min(92dvh, 52rem);
+  padding:.5rem;border-radius:var(--r-shell);
+  background:color-mix(in srgb, var(--cream) 92%, transparent);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6), 0 60px 120px -40px rgba(4,32,30,.6);
+  opacity:0;transform:scale(.96) translateY(14px);
+  transition:opacity 320ms var(--out), transform 460ms var(--drawer);
+  display:flex;flex-direction:column;
+}
+.modal.open .sheet{opacity:1;transform:none}
+.sheet__core{
+  background:var(--paper);border-radius:calc(var(--r-shell) - .5rem);box-shadow:var(--inner-lite);
+  display:flex;flex-direction:column;overflow:hidden;flex:1;min-height:0;
+}
+
+.sheet__top{padding:1.15rem 1.35rem .9rem;display:flex;align-items:center;gap:1rem;flex:none}
+.sheet__brand{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0}
+.sheet__brand svg{height:.85rem;width:6.5rem;fill:var(--teal-deep);flex:none}
+.sheet__count{font-family:var(--font-display);font-size:var(--t-xs);font-weight:600;letter-spacing:.12em;color:var(--ink-mute);text-transform:uppercase;
+  font-variant-numeric:tabular-nums}
+.x{width:2.25rem;height:2.25rem;border-radius:var(--r-pill);border:0;cursor:pointer;flex:none;
+  background:color-mix(in srgb, var(--teal-deep) 7%, transparent);display:grid;place-items:center;
+  transition:background-color 260ms var(--out), transform 200ms var(--out)}
+.x svg{width:.85rem;height:.85rem;stroke:var(--ink);stroke-width:1.6;fill:none;stroke-linecap:round}
+@media (hover:hover) and (pointer:fine){ .x:hover{background:color-mix(in srgb, var(--teal-deep) 14%, transparent)} }
+.x:active{transform:scale(.93)}
+
+.bar{height:4px;background:color-mix(in srgb, var(--teal-deep) 10%, transparent);margin-inline:1.35rem;border-radius:2px;overflow:hidden;flex:none}
+.bar__fill{display:block;height:100%;width:0;border-radius:2px;background:linear-gradient(90deg, var(--teal-deep), var(--teal) 55%, var(--teal-bright));
+  transition:width 620ms var(--drawer)}
+
+.sheet__body{padding:1.6rem 1.35rem 1.15rem;overflow-y:auto;flex:1;min-height:0;-webkit-overflow-scrolling:touch}
+.sheet__body::-webkit-scrollbar{width:6px}
+.sheet__body::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:3px}
+
+.q{display:none}
+.q[data-active]{display:block}
+.q.enter{animation:qIn 480ms var(--out) both}
+.q.enter-back{animation:qInBack 480ms var(--out) both}
+@keyframes qIn{from{opacity:0;transform:translateX(26px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes qInBack{from{opacity:0;transform:translateX(-26px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion: reduce){ .q.enter,.q.enter-back{animation:fadeOnly 240ms ease both} @keyframes fadeOnly{from{opacity:0}to{opacity:1}} }
+
+.q__kicker{font-family:var(--font-display);font-size:var(--t-xs);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:.7rem}
+.q h3{font-size:var(--t-xl);letter-spacing:-.035em;line-height:1.14}
+.q__help{font-size:var(--t-sm);color:var(--ink-mute);margin-top:.6rem}
+
+/* Campos */
+.field{margin-top:1.5rem}
+.inp{
+  width:100%;padding:1rem 1.15rem;border-radius:var(--r-sm);border:0;
+  background:color-mix(in srgb, var(--teal-deep) 4%, transparent);
+  box-shadow:inset 0 0 0 1px var(--line);
+  font-family:var(--font-display);font-size:var(--t-lg);font-weight:400;color:var(--ink);
+  transition:box-shadow 300ms var(--out), background-color 300ms var(--out);
+}
+.inp::placeholder{color:color-mix(in srgb, var(--ink-mute) 62%, transparent);font-weight:300}
+.inp:focus{outline:none;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--teal), 0 0 0 4px color-mix(in srgb, var(--teal) 12%, transparent)}
+.inp[aria-invalid="true"]{box-shadow:inset 0 0 0 1.5px #E0563F, 0 0 0 4px rgba(224,86,63,.1)}
+.err{display:flex;gap:.45rem;align-items:center;margin-top:.6rem;font-size:var(--t-sm);color:#C0402A;
+  opacity:0;transform:translateY(-3px);transition:opacity 240ms var(--out), transform 240ms var(--out)}
+.err.show{opacity:1;transform:none}
+.err svg{width:.85rem;height:.85rem;fill:currentColor;flex:none}
+.shake{animation:shk 380ms var(--out)}
+@keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+
+/* Opções em cartão */
+.opts{display:grid;gap:.55rem;margin-top:1.5rem}
+.opts--2{grid-template-columns:repeat(2,1fr)}
+.opts--3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:560px){ .opts--2,.opts--3{grid-template-columns:1fr} }
+.opt{
+  position:relative;display:flex;align-items:center;gap:.85rem;text-align:left;
+  padding:1rem 1.1rem;border-radius:var(--r-sm);border:0;cursor:pointer;width:100%;
+  background:color-mix(in srgb, var(--teal-deep) 3.5%, transparent);
+  box-shadow:inset 0 0 0 1px var(--line);
+  font-family:var(--font-display);font-size:var(--t-base);font-weight:500;color:var(--ink);
+  transition:transform 220ms var(--out), box-shadow 300ms var(--out), background-color 300ms var(--out);
+}
+@media (hover:hover) and (pointer:fine){
+  .opt:hover{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-1);transform:translateY(-1px)}
+}
+.opt:active{transform:scale(.985)}
+.opt[aria-pressed="true"]{background:color-mix(in srgb, var(--teal) 10%, transparent);box-shadow:inset 0 0 0 1.5px var(--teal)}
+.opt__dot{width:1.35rem;height:1.35rem;border-radius:var(--r-pill);flex:none;position:relative;
+  box-shadow:inset 0 0 0 1.5px var(--line-strong);transition:box-shadow 260ms var(--out), background-color 260ms var(--out)}
+.opt__dot::after{content:'';position:absolute;inset:0;margin:auto;width:.5rem;height:.5rem;border-radius:50%;background:#fff;
+  transform:scale(.2);opacity:0;transition:transform 320ms var(--spring), opacity 200ms var(--out)}
+.opt[aria-pressed="true"] .opt__dot{background:var(--teal-deep);box-shadow:inset 0 0 0 1.5px var(--teal-deep)}
+.opt[aria-pressed="true"] .opt__dot::after{transform:scale(1);opacity:1}
+.opt__txt{flex:1;min-width:0}
+.opt__txt small{display:block;font-family:var(--font-body);font-size:var(--t-xs);font-weight:400;color:var(--ink-mute);margin-top:.15rem;letter-spacing:0}
+
+/* Grupos de turma */
+.group{margin-top:1.35rem}
+.group__label{font-family:var(--font-display);font-size:var(--t-xs);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.group__label::after{content:'';flex:1;height:1px;background:var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{
+  border:0;cursor:pointer;padding:.55rem .95rem;border-radius:var(--r-pill);
+  background:color-mix(in srgb, var(--teal-deep) 4%, transparent);
+  box-shadow:inset 0 0 0 1px var(--line);
+  font-family:var(--font-display);font-size:var(--t-sm);font-weight:500;color:var(--ink-soft);
+  transition:transform 200ms var(--out), box-shadow 280ms var(--out), background-color 280ms var(--out), color 280ms var(--out);
+}
+@media (hover:hover) and (pointer:fine){ .chip:hover{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line-strong), var(--sh-1)} }
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed="true"]{background:var(--teal-deep);color:#fff;box-shadow:var(--sh-teal), var(--inner-dark)}
+
+/* Revisão */
+.review{margin-top:1.4rem;border-radius:var(--r-core);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.review__row{display:flex;gap:1rem;justify-content:space-between;align-items:baseline;padding:.85rem 1.1rem;font-size:var(--t-sm)}
+.review__row + .review__row{border-top:1px solid var(--line)}
+.review__row dt{color:var(--ink-mute);flex:none}
+.review__row dd{margin:0;font-family:var(--font-display);font-weight:500;color:var(--ink);text-align:right}
+.review__row button{border:0;background:none;cursor:pointer;color:var(--teal);font-size:var(--t-xs);font-family:var(--font-display);font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:0;margin-left:.5rem}
+.consent{display:flex;gap:.7rem;align-items:flex-start;margin-top:1.2rem;font-size:var(--t-xs);color:var(--ink-mute);line-height:1.55;cursor:pointer}
+.consent input{position:absolute;opacity:0;width:0;height:0}
+.consent__box{width:1.25rem;height:1.25rem;border-radius:.45rem;flex:none;margin-top:.05rem;position:relative;
+  box-shadow:inset 0 0 0 1.5px var(--line-strong);transition:background-color 240ms var(--out), box-shadow 240ms var(--out)}
+.consent__box svg{position:absolute;inset:0;margin:auto;width:.75rem;height:.75rem;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset 320ms var(--out)}
+.consent input:checked + .consent__box{background:var(--teal-deep);box-shadow:inset 0 0 0 1.5px var(--teal-deep)}
+.consent input:checked + .consent__box svg{stroke-dashoffset:0}
+.consent input:focus-visible + .consent__box{box-shadow:var(--focus)}
+
+/* Rodapé do modal */
+.sheet__foot{padding:1rem 1.35rem 1.25rem;display:flex;align-items:center;gap:.75rem;flex:none;
+  border-top:1px solid var(--line);background:color-mix(in srgb, var(--cream) 55%, transparent)}
+.back{
+  border:0;background:none;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;
+  font-family:var(--font-display);font-size:var(--t-sm);font-weight:500;color:var(--ink-mute);
+  padding:.55rem .8rem;border-radius:var(--r-pill);
+  transition:color 240ms var(--out), background-color 240ms var(--out), opacity 240ms var(--out), transform 200ms var(--out);
+}
+.back svg{width:.85rem;height:.85rem;fill:currentColor}
+@media (hover:hover) and (pointer:fine){ .back:hover{color:var(--ink);background:color-mix(in srgb, var(--teal-deep) 6%, transparent)} }
+.back:active{transform:scale(.96)}
+.back[hidden]{display:none}
+.sheet__foot .grow{flex:1}
+.kbd{font-family:var(--font-display);font-size:var(--t-xs);color:var(--ink-mute);display:none;align-items:center;gap:.35rem}
+.kbd b{font-weight:600;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);border-radius:.35rem;padding:.15rem .4rem;color:var(--ink-soft)}
+@media (min-width:700px){ .kbd{display:flex} }
+
+/* Sucesso */
+.done{text-align:center;padding:1.5rem .5rem}
+.done__ring{width:5rem;height:5rem;margin:0 auto 1.5rem;border-radius:var(--r-pill);display:grid;place-items:center;
+  background:color-mix(in srgb, var(--lime) 30%, transparent);position:relative}
+.done__ring svg{width:2rem;height:2rem;stroke:var(--teal-deep);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:28;stroke-dashoffset:28;animation:tick 560ms var(--out) 220ms forwards}
+@keyframes tick{to{stroke-dashoffset:0}}
+.done__ring::before{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 color-mix(in srgb,var(--lime) 55%, transparent);
+  animation:pulse 1.6s var(--out) .2s 2}
+@keyframes pulse{to{box-shadow:0 0 0 22px transparent}}
+.done h3{font-size:var(--t-2xl)}
+.done p{margin-top:1rem;color:var(--ink-mute);max-width:40ch;margin-inline:auto;font-size:var(--t-sm)}
+.done__card{margin-top:1.8rem;padding:.4rem;border-radius:var(--r-core);background:color-mix(in srgb,var(--teal-deep) 4%,transparent);box-shadow:inset 0 0 0 1px var(--line)}
+.done__card .in{background:var(--paper);border-radius:calc(var(--r-core) - .4rem);padding:1.1rem;display:grid;gap:.5rem;text-align:left;font-size:var(--t-sm)}
+.done__card .in div{display:flex;justify-content:space-between;gap:1rem}
+.done__card .in span:first-child{color:var(--ink-mute)}
+.done__card .in span:last-child{font-family:var(--font-display);font-weight:500;color:var(--ink)}
+
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.confetti i{position:absolute;width:.5rem;height:.5rem;border-radius:1px;opacity:0;animation:fall 2.4s var(--out) forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(-10%) rotate(0)}100%{opacity:0;transform:translateY(560px) rotate(540deg)}}
+@media (prefers-reduced-motion: reduce){ .confetti{display:none} .done__ring::before{animation:none} .done__ring svg{animation:none;stroke-dashoffset:0} }
+
+/* Barra fixa mobile */
+.dock{
+  position:fixed;left:var(--gut);right:var(--gut);bottom:1rem;z-index:55;display:none;
+  transform:translateY(160%);transition:transform 520ms var(--drawer);
+}
+.dock.show{transform:translateY(0)}
+.dock .btn{width:100%;justify-content:space-between}
+@media (max-width:900px){ .dock{display:block} }
+</style>
+</head>
+
+<body>
+
+<!-- ============ SPRITE DE ÍCONES / LOGO ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="zh-logo" viewBox="0 0 1811.58 237.18">
+    <path d="M45.06,223.29a79.41,79.41,0,0,1-28.9-28.37A74.7,74.7,0,0,1,5.43,155.81V118.43A76,76,0,0,1,16,79.19,79.14,79.14,0,0,1,44.8,50.56,77.67,77.67,0,0,1,84.7,40a81,81,0,0,1,40.83,10.74q18.81,10.74,28.1,28.24l-18.56,9.54q-6.63-12.72-20.55-20.81A58.37,58.37,0,0,0,84.7,59.58a56.87,56.87,0,0,0-28.77,7.68A58.81,58.81,0,0,0,34.59,88.07a54.49,54.49,0,0,0-8,28.77V157.4a51.76,51.76,0,0,0,8.21,28.5,60.28,60.28,0,0,0,21.74,20.42,58.31,58.31,0,0,0,28.9,7.55,62.84,62.84,0,0,0,30.36-7.82q14.45-7.81,21.34-20.28l17.5,9.81q-10.08,17.23-29.43,27.71a84.69,84.69,0,0,1-40.83,10.47,77.58,77.58,0,0,1-39.37-10.47"/>
+    <path d="M232.77,222.49a84.22,84.22,0,0,1-30.23-29.56,76.71,76.71,0,0,1-11.27-40.56V121.08a77.38,77.38,0,0,1,11.27-40.69,83.88,83.88,0,0,1,30.23-29.7,82.75,82.75,0,0,1,82.45,0,85,85,0,0,1,30.35,29.7A76.69,76.69,0,0,1,357,121.08v31.29a76,76,0,0,1-11.4,40.56,85.37,85.37,0,0,1-30.35,29.56,82.75,82.75,0,0,1-82.45,0m71.58-16.44a62.27,62.27,0,0,0,22.67-22A56.83,56.83,0,0,0,335.5,154V119.49A56.6,56.6,0,0,0,327,89.27,62.9,62.9,0,0,0,304.48,67.4a61,61,0,0,0-60.71,0A63.92,63.92,0,0,0,221.1,89.27a55.85,55.85,0,0,0-8.62,30.22V154A56.75,56.75,0,0,0,221,184.05a62.11,62.11,0,0,0,22.67,22,61,61,0,0,0,60.71,0"/>
+    <path d="M405,227.13a7.92,7.92,0,0,1-2.38-5.83V43.93h21.21V210.16H538.05v19.36H410.53a7.64,7.64,0,0,1-5.57-2.39"/>
+    <path d="M581.53,227.13a7.93,7.93,0,0,1-2.39-5.83V51.88a8.17,8.17,0,0,1,8-8H717.27V63.28H600.35V210.16H717.27v19.36H587.1a7.63,7.63,0,0,1-5.57-2.39m5.83-102.87H710.64v19.62H587.36Z"/>
+    <path d="M803.17,222.89a79.88,79.88,0,0,1-29.3-28.37,73.89,73.89,0,0,1-10.73-39V118.17a72.88,72.88,0,0,1,11.13-39A82.41,82.41,0,0,1,804,50.56,78.86,78.86,0,0,1,843.73,40a82.67,82.67,0,0,1,41,10.74q19.23,10.74,29,28.5l-18.56,9q-6.61-12.73-21.07-20.68a61.64,61.64,0,0,0-30.09-8,58.78,58.78,0,0,0-29.3,7.68,61.25,61.25,0,0,0-22,20.81,52.08,52.08,0,0,0-8.35,28.5v40.57a53.1,53.1,0,0,0,8.08,28.63,58.49,58.49,0,0,0,21.74,20.55,60,60,0,0,0,29.56,7.55,62.47,62.47,0,0,0,27.84-6.36,53.12,53.12,0,0,0,20.94-18,46.34,46.34,0,0,0,8-26.77V149.18h21.47v11.94q0,20.94-10.73,37.38a74.58,74.58,0,0,1-28.64,25.72A82.64,82.64,0,0,1,844,233.49a80.83,80.83,0,0,1-40.83-10.6m44.27-88.55h63.63a10.86,10.86,0,0,1,10.87,10.87v7.42h-74.5Z"/>
+    <path d="M966.22,43.93H1094.8V63.28H966.22ZM967,210.16h126.73v19.36H967Zm53-166.23h21.21V229.52H1020Z"/>
+    <path d="M1180.83,222.49a84.19,84.19,0,0,1-30.22-29.56,76.61,76.61,0,0,1-11.27-40.56V121.08a77.29,77.29,0,0,1,11.27-40.69,83.85,83.85,0,0,1,30.22-29.7,82.75,82.75,0,0,1,82.45,0,85,85,0,0,1,30.36,29.7,76.69,76.69,0,0,1,11.4,40.69v31.29a76,76,0,0,1-11.4,40.56,85.31,85.31,0,0,1-30.36,29.56,82.75,82.75,0,0,1-82.45,0m71.59-16.44a62.24,62.24,0,0,0,22.66-22,56.75,56.75,0,0,0,8.49-30.09V119.49a56.52,56.52,0,0,0-8.49-30.22,63,63,0,0,0-22.53-21.87,61,61,0,0,0-60.72,0,64,64,0,0,0-22.67,21.87,55.93,55.93,0,0,0-8.61,30.22V154a56.83,56.83,0,0,0,8.48,30.09,62.19,62.19,0,0,0,22.67,22,61,61,0,0,0,60.72,0"/>
+    <path d="M1784.85,128.58l-6.47,7.93,6.47,8.15h28.83V128.58Zm-22.77,16.08h16.3V128.58h-16.3Zm-6.47-16.08h-29v16.08h29l6.47-8.15Zm6.47,53.68h16.3V151.14l-8.15-6.48-8.15,6.48Zm0-91.08V122.1l8.15,6.48,8.15-6.48V91.18Z"/>
+    <path d="M1580.85,127.27l71.69,7.55-71.69,11.36v88.95h-31.24v-159l-108,133.85h75.27l-.8,25.2H1413.93c-4,0-6.52-.56-9.23-3.26a13.22,13.22,0,0,1-4.13-9.78,13.88,13.88,0,0,1,2.86-8.74l118-149H1405.66v-26h175.19Z"/>
+    <rect x="1652.54" y="38.32" width="31.32" height="196.81"/>
+    <polygon points="657.37 1.2 677.52 1.2 655.25 38.32 642.78 38.32 657.37 1.2"/>
+  </symbol>
+  <symbol id="spark" viewBox="0 0 1015.34 1080">
+    <path d="M13.05,540.08c131.28-11.49,244.32-62.18,337.06-155.64S491.78,177,501.83,46.08c10,133.59,60.52,248.47,156.1,342.43C753.3,482.26,868.7,531.41,1002.29,540,868.83,548.85,753,597.88,657.65,691.91s-145.85,208.62-155.83,342c-10.09-131.06-59.07-245-151.95-338.44C257.16,602.18,144.14,551.55,13.05,540.08Z"/>
+  </symbol>
+  <symbol id="arw" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 5h11a.5.5 0 0 1 .5.5v11a1 1 0 1 1-2 0V8.41L6.7 18.71a1 1 0 1 1-1.41-1.41L15.59 7H7.5a1 1 0 0 1 0-2Z"/></symbol>
+  <symbol id="arw-l" viewBox="0 0 24 24"><path d="M10.7 5.3a1 1 0 0 1 0 1.4L6.41 11H19a1 1 0 1 1 0 2H6.41l4.3 4.3a1 1 0 1 1-1.42 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.42 0Z"/></symbol>
+  <symbol id="chk" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2Zm1 14h-2v2h2v-2Zm0-7h-2v5h2V9Z"/></symbol>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__logo" href="#topo" aria-label="Colégio ZH+, início">
+      <svg role="img" aria-hidden="true"><use href="#zh-logo"/></svg>
+    </a>
+    <nav class="nav__links" aria-label="Seções da página">
+      <a href="#fases">Fases</a>
+      <a href="#diferenciais">Por que o ZH+</a>
+      <a href="#unidades">Unidades</a>
+      <a href="#visita">A visita</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <div class="nav__cta">
+      <button class="btn btn--sm js-open" data-src="nav">
+        Agendar visita
+        <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+      </button>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+  <ul>
+    <li><a href="#fases">Fases</a></li>
+    <li><a href="#diferenciais">Por que o ZH+</a></li>
+    <li><a href="#unidades">Unidades</a></li>
+    <li><a href="#visita">A visita</a></li>
+    <li><a href="#duvidas">Dúvidas</a></li>
+  </ul>
+</div>
+
+<main id="topo">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+  </div>
+  <div class="shell hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Matrículas 2026 abertas</span>
+      <h1>
+        <span class="ln"><span>Descubra de perto o lugar</span></span>
+        <span class="ln"><span>onde seu filho vai</span></span>
+        <span class="ln"><span><span class="mark">crescer feliz.</span></span></span>
+      </h1>
+      <p class="lede hero__lede">Agende agora uma visita e conheça uma escola acolhedora, moderna e focada no desenvolvimento completo do seu filho.</p>
+      <div class="hero__actions">
+        <button class="btn js-open" data-src="hero">
+          Agendar minha visita
+          <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+        </button>
+        <a class="btn btn--ghost" href="#fases">
+          Ver as fases
+          <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+        </a>
+      </div>
+      <div class="hero__units">
+        <span>Três unidades no Rio:</span>
+        <span class="unit-chip">Icaraí</span>
+        <span class="unit-chip">Méier</span>
+        <span class="unit-chip">Vila Isabel</span>
+      </div>
+    </div>
+
+    <div class="hero__visual">
+      <div class="portrait">
+        <svg class="spark-deco spark-deco--a" aria-hidden="true"><use href="#spark"/></svg>
+        <svg class="spark-deco spark-deco--b" aria-hidden="true"><use href="#spark"/></svg>
+        <div class="portrait__core">
+          <img src="https://colegiozhmais.com.br/wp-content/uploads/2025/08/infantil-zh2-956x1024.png"
+               alt="Criança sorrindo em atividade da Educação Infantil do Colégio ZH+" loading="eager" decoding="async" width="956" height="1024">
+        </div>
+        <div class="float-card">
+          <div class="float-card__core">
+            <span class="float-card__ico"><svg aria-hidden="true"><use href="#spark"/></svg></span>
+            <span>
+              <b>2 min</b>
+              <small>para agendar sua visita</small>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Proposta pedagógica ZH+ <svg><use href="#spark"/></svg> Inovação que inspira <svg><use href="#spark"/></svg> Excelência que transforma <svg><use href="#spark"/></svg> Proposta pedagógica ZH+ <svg><use href="#spark"/></svg> Inovação que inspira <svg><use href="#spark"/></svg> Excelência que transforma <svg><use href="#spark"/></svg></span>
+    <span>Proposta pedagógica ZH+ <svg><use href="#spark"/></svg> Inovação que inspira <svg><use href="#spark"/></svg> Excelência que transforma <svg><use href="#spark"/></svg> Proposta pedagógica ZH+ <svg><use href="#spark"/></svg> Inovação que inspira <svg><use href="#spark"/></svg> Excelência que transforma <svg><use href="#spark"/></svg></span>
+  </div>
+</div>
+
+<!-- ============ FASES / CICLOS ============ -->
+<section class="sec" id="fases">
+  <div class="shell">
+    <div class="sec__head reveal">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> ZH+ para cada fase</span>
+      <h2 class="h-sec">Descubra como o ZH+ trabalha cada ciclo de aprendizagem</h2>
+      <p class="lede">Cada etapa tem seu tempo, sua linguagem e seus desafios. Escolha um ciclo e veja o que muda na prática.</p>
+    </div>
+
+    <div class="reveal" data-d="1">
+      <div class="cycles__tabs" role="tablist" aria-label="Ciclos de aprendizagem">
+        <span class="cycles__ind" aria-hidden="true"></span>
+        <button class="cycles__tab" role="tab" aria-selected="true"  aria-controls="cy-1" id="tab-1" data-cy="1">Educação Infantil</button>
+        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-2" id="tab-2" data-cy="2" tabindex="-1">Fundamental I</button>
+        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-3" id="tab-3" data-cy="3" tabindex="-1">Fundamental II</button>
+        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-4" id="tab-4" data-cy="4" tabindex="-1">Ensino Médio</button>
+      </div>
+
+      <div class="cycles__stage">
+        <div class="cycle" id="cy-1" role="tabpanel" aria-labelledby="tab-1" data-active>
+          <div class="cycle__txt">
+            <span class="cycle__age">Infantil N1 ao N5</span>
+            <h3>Educação Infantil</h3>
+            <p>Incentivo à curiosidade e à exploração, estimulando o desenvolvimento cognitivo, socioemocional e linguístico e o prazer de aprender.</p>
+            <ul class="cycle__list">
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Rotina acolhedora, com adaptação respeitosa ao tempo de cada criança</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Brincar como linguagem central da aprendizagem</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Comunicação constante com a família sobre cada avanço</li>
+            </ul>
+            <button class="btn btn--sm js-open" data-src="ciclo-infantil" data-turma="Infantil N3" style="margin-top:2rem">
+              Agendar visita para a Infantil
+              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+            </button>
+          </div>
+          <div class="cycle__art">
+            <div class="core" style="background:linear-gradient(150deg,var(--cyan),var(--teal-bright))">
+              <img src="https://colegiozhmais.com.br/wp-content/uploads/2025/08/infantil-zh2-956x1024.png" alt="Aluno da Educação Infantil do Colégio ZH+" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+
+        <div class="cycle" id="cy-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+          <div class="cycle__txt">
+            <span class="cycle__age">1º ao 5º ano</span>
+            <h3>Fundamental I</h3>
+            <p>Atividades para estimular a capacidade de expressão verbal e textual, a interpretação de texto e a formação de leitores.</p>
+            <ul class="cycle__list">
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Alfabetização e letramento com acompanhamento individualizado</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Projetos que ligam o conteúdo à vida real da criança</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Equilíbrio entre desenvolvimento acadêmico, artístico e esportivo</li>
+            </ul>
+            <button class="btn btn--sm js-open" data-src="ciclo-fund1" data-turma="3º Ano - Ensino Fundamental Anos Iniciais" style="margin-top:2rem">
+              Agendar visita para o Fund I
+              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+            </button>
+          </div>
+          <div class="cycle__art">
+            <div class="core" style="background:linear-gradient(150deg,var(--butter),var(--lime))">
+              <span class="glyph" style="color:rgba(18,23,22,.82)">1—5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cycle" id="cy-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+          <div class="cycle__txt">
+            <span class="cycle__age">6º ao 9º ano</span>
+            <h3>Fundamental II</h3>
+            <p>Momento de desenvolver a análise crítica, o raciocínio lógico e uma visão global e cidadã, para uma aprendizagem significativa.</p>
+            <ul class="cycle__list">
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Autonomia de estudo e organização da rotina</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Programas de tecnologia, robótica e línguas</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Olhar socioemocional atento à adolescência</li>
+            </ul>
+            <button class="btn btn--sm js-open" data-src="ciclo-fund2" data-turma="7º Ano - Ensino Fundamental Anos Finais" style="margin-top:2rem">
+              Agendar visita para o Fund II
+              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+            </button>
+          </div>
+          <div class="cycle__art">
+            <div class="core" style="background:linear-gradient(150deg,var(--mint),var(--teal))">
+              <span class="glyph">6—9</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cycle" id="cy-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+          <div class="cycle__txt">
+            <span class="cycle__age">1ª à 3ª série e Pré-Vestibular</span>
+            <h3>Ensino Médio</h3>
+            <p>Na 1ª e 2ª séries, os estudantes revisitam conhecimentos aplicados à vida e à realidade deles. Já na 3ª série, eles se preparam para os vestibulares.</p>
+            <ul class="cycle__list">
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Preparação consistente para ENEM e vestibulares</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Projeto de vida e escolha profissional acompanhados de perto</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Material e recursos das melhores soluções educacionais do país</li>
+            </ul>
+            <button class="btn btn--sm js-open" data-src="ciclo-medio" data-turma="1ª Série - Ensino Médio" style="margin-top:2rem">
+              Agendar visita para o Médio
+              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+            </button>
+          </div>
+          <div class="cycle__art">
+            <div class="core" style="background:linear-gradient(150deg,var(--teal-bright),var(--teal-deep))">
+              <img src="https://colegiozhmais.com.br/wp-content/uploads/2025/05/fund-2-zh-mais-mulher.webp" alt="Estudante do Ensino Médio do Colégio ZH+" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIFERENCIAIS (BENTO) ============ -->
+<section class="sec sec--paper" id="diferenciais">
+  <div class="shell">
+    <div class="sec__head reveal">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Por que escolher o ZH+</span>
+      <h2 class="h-sec">Excelência de ensino e inovação, numa <span class="mark">experiência única</span></h2>
+    </div>
+
+    <div class="bento">
+      <div class="tile tile--a tile--teal reveal">
+        <div class="tile__core">
+          <span class="tile__ico"><svg aria-hidden="true"><use href="#spark"/></svg></span>
+          <h3>Ensino de excelência</h3>
+          <p>Preparação com profissionais capacitados e atualizados, com os melhores materiais e recursos do país e do mundo.</p>
+          <svg class="tile__deco" aria-hidden="true"><use href="#spark"/></svg>
+        </div>
+      </div>
+      <div class="tile tile--b reveal" data-d="1">
+        <div class="tile__core">
+          <span class="tile__ico"><svg aria-hidden="true"><use href="#spark"/></svg></span>
+          <h3>Inovação</h3>
+          <p>Metodologias, programas e soluções educacionais adaptadas às necessidades de cada região.</p>
+        </div>
+      </div>
+      <div class="tile tile--c reveal" data-d="1">
+        <div class="tile__core">
+          <span class="tile__ico"><svg aria-hidden="true"><use href="#spark"/></svg></span>
+          <h3>Desenvolvimento integral</h3>
+          <p>Equilíbrio entre desenvolvimento acadêmico, artístico, esportivo e socioemocional, para formação plena.</p>
+        </div>
+      </div>
+      <div class="tile tile--d tile--lime reveal" data-d="2">
+        <div class="tile__core">
+          <span class="tile__ico"><svg aria-hidden="true"><use href="#spark"/></svg></span>
+          <h3>Acolhimento</h3>
+          <p>Olhar individualizado e cuidadoso para o bem-estar emocional dos alunos, em um ambiente seguro, acolhedor e estimulante.</p>
+          <svg class="tile__deco" aria-hidden="true" style="color:var(--ink)"><use href="#spark"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNIDADES ============ -->
+<section class="sec sec--dark" id="unidades">
+  <div class="shell">
+    <div class="sec__head reveal">
+      <span class="eyebrow on-dark"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Onde estamos</span>
+      <h2 class="h-sec">Escolha a unidade mais perto de casa</h2>
+      <p class="lede" style="color:rgba(255,255,255,.62)">Cada unidade tem programas e projetos pensados para a sua região. Clique e já comece o agendamento com a unidade preenchida.</p>
+    </div>
+
+    <div class="units">
+      <article class="unit reveal">
+        <div class="unit__core">
+          <span class="unit__n">Unidade 01</span>
+          <h3>Icaraí</h3>
+          <p>Niterói. Estrutura completa da Educação Infantil ao Ensino Médio, num bairro que respira convivência.</p>
+          <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Icaraí">
+            Agendar em Icaraí
+            <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+          </button>
+        </div>
+      </article>
+      <article class="unit reveal" data-d="1">
+        <div class="unit__core">
+          <span class="unit__n">Unidade 02</span>
+          <h3>Méier</h3>
+          <p>Zona Norte do Rio. Tradição de ensino somada às soluções educacionais mais atuais do país.</p>
+          <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Méier">
+            Agendar no Méier
+            <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+          </button>
+        </div>
+      </article>
+      <article class="unit reveal" data-d="2">
+        <div class="unit__core">
+          <span class="unit__n">Unidade 03</span>
+          <h3>Vila Isabel</h3>
+          <p>Rio de Janeiro. Ambiente acolhedor e estimulante, com escuta constante das famílias.</p>
+          <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Vila Isabel">
+            Agendar em Vila Isabel
+            <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMO É A VISITA ============ -->
+<section class="sec" id="visita">
+  <div class="shell">
+    <div class="sec__head reveal">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Como funciona</span>
+      <h2 class="h-sec">Do cadastro ao dia da visita, em três passos</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h3>Você faz o cadastro</h3>
+        <p>São oito perguntas rápidas, uma de cada vez. Leva cerca de dois minutos e pode ser feito pelo celular.</p>
+      </div>
+      <div class="step reveal" data-d="1">
+        <h3>A equipe entra em contato</h3>
+        <p>Falamos com você pelo WhatsApp ou e-mail informado para combinar o melhor dia e horário na unidade escolhida.</p>
+      </div>
+      <div class="step reveal" data-d="2">
+        <h3>Vocês conhecem a escola</h3>
+        <p>Você conhece as instalações, a proposta pedagógica e a equipe, com espaço para tirar todas as dúvidas da família.</p>
+      </div>
+    </div>
+
+    <div class="reveal" data-d="2" style="margin-top:clamp(3rem,7vw,5rem)">
+      <p class="eyebrow" style="margin-bottom:1.5rem"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Parcerias que fazem o ensino acontecer</p>
+      <div class="partners">
+        <div class="partner"><div class="partner__core"><img src="https://colegiozhmais.com.br/wp-content/uploads/2025/07/SAS.jpg" alt="SAS Plataforma de Educação" loading="lazy" decoding="async"></div></div>
+        <div class="partner"><div class="partner__core"><img src="https://colegiozhmais.com.br/wp-content/uploads/2025/07/Amco-1024x488.jpg" alt="Amco" loading="lazy" decoding="async"></div></div>
+        <div class="partner"><div class="partner__core"><img src="https://colegiozhmais.com.br/wp-content/uploads/2025/07/Happy-Ensino-1-1024x504.jpg" alt="Happy Ensino" loading="lazy" decoding="async"></div></div>
+        <div class="partner"><div class="partner__core"><img src="https://colegiozhmais.com.br/wp-content/uploads/2025/07/Logo-Carta-RoboCode.jpg" alt="RoboCode" loading="lazy" decoding="async"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUEM SOMOS ============ -->
+<section class="sec sec--paper" id="quem-somos">
+  <div class="shell" style="display:grid;grid-template-columns:minmax(0,1fr);gap:2rem;max-width:52rem;text-align:center">
+    <div class="reveal">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Quem somos</span>
+      <h2 class="h-sec" style="margin-top:1.15rem">No ZH+, combinamos excelência de ensino e inovação para criar uma experiência única.</h2>
+      <p class="lede" style="margin:1.5rem auto 0">Nosso compromisso é garantir resultados, ao mesmo tempo em que valorizamos criatividade, autonomia e desenvolvimento integral. Cada aluno é único, e nossa abordagem é adaptada para oferecer os melhores recursos e suporte possíveis, mantendo comunicação e escuta constantes com as famílias.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="sec" id="duvidas">
+  <div class="shell">
+    <div class="sec__head reveal" style="text-align:center;margin-inline:auto">
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Dúvidas frequentes</span>
+      <h2 class="h-sec">Antes de agendar, talvez você queira saber</h2>
+    </div>
+    <div class="faq">
+      <details class="qa reveal">
+        <summary>O cadastro já garante a matrícula?<span class="qa__plus" aria-hidden="true"></span></summary>
+        <div class="qa__body">Não. O cadastro é o primeiro passo: ele registra o interesse da família e agenda a visita. A matrícula é feita depois, presencialmente, com a equipe da unidade escolhida.</div>
+      </details>
+      <details class="qa reveal" data-d="1">
+        <summary>Quanto tempo leva para preencher?<span class="qa__plus" aria-hidden="true"></span></summary>
+        <div class="qa__body">Cerca de dois minutos. São oito perguntas, apresentadas uma de cada vez, e você pode voltar e corrigir qualquer resposta antes de enviar.</div>
+      </details>
+      <details class="qa reveal" data-d="1">
+        <summary>Posso conhecer mais de uma unidade?<span class="qa__plus" aria-hidden="true"></span></summary>
+        <div class="qa__body">Pode. Escolha a unidade de maior interesse no cadastro e avise a equipe no contato: dá para organizar visitas às demais unidades.</div>
+      </details>
+      <details class="qa reveal" data-d="2">
+        <summary>E se meu filho ainda não estuda?<span class="qa__plus" aria-hidden="true"></span></summary>
+        <div class="qa__body">Sem problema. Ao responder que o candidato não estuda, o cadastro pula automaticamente a pergunta sobre o colégio atual.</div>
+      </details>
+      <details class="qa reveal" data-d="2">
+        <summary>Quem entra em contato depois do envio?<span class="qa__plus" aria-hidden="true"></span></summary>
+        <div class="qa__body">A equipe de admissão da unidade escolhida, pelo WhatsApp ou e-mail que você informar, para combinar dia e horário da visita.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="sec" style="padding-top:0">
+  <div class="shell">
+    <div class="finale reveal">
+      <span class="eyebrow on-dark"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Inovação que inspira, excelência que transforma</span>
+      <h2 style="margin-top:1.5rem">Venha ver de perto onde seu filho vai estudar</h2>
+      <p>Duas perguntas para começar, dois minutos para terminar. A equipe do ZH+ cuida do resto.</p>
+      <button class="btn btn--lime js-open" data-src="finale">
+        Agendar minha visita
+        <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__grid">
+      <div>
+        <span class="foot__logo"><svg role="img" aria-label="Colégio ZH+"><use href="#zh-logo"/></svg></span>
+        <p class="lede" style="font-size:var(--t-sm);margin-top:1.2rem;max-width:34ch">Inovação que inspira, excelência que transforma. Educação Infantil ao Ensino Médio, no Rio de Janeiro e em Niterói.</p>
+      </div>
+      <div>
+        <h4>Unidades</h4>
+        <ul>
+          <li><a href="#unidades">Icaraí</a></li>
+          <li><a href="#unidades">Méier</a></li>
+          <li><a href="#unidades">Vila Isabel</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Para as famílias</h4>
+        <ul>
+          <li><a href="https://colegiozhmais.com.br/">Site institucional</a></li>
+          <li><a href="https://colegiozhmais.com.br/">Adquira seu uniforme</a></li>
+          <li><a href="https://colegiozhmais.com.br/">Material didático</a></li>
+          <li><a href="https://colegiozhmais.com.br/">Portal do Aluno</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar">
+      <span>© <span id="ano"></span> Colégio ZH+. Todos os direitos reservados.</span>
+      <span>Os dados enviados no cadastro são usados apenas para contato sobre a visita.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ DOCK MOBILE ============ -->
+<div class="dock" id="dock">
+  <button class="btn js-open" data-src="dock">
+    Agendar minha visita
+    <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+  </button>
+</div>
+
+<!-- ============ MODAL DO FORMULÁRIO ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="q-title" aria-hidden="true">
+  <div class="modal__scrim" data-close></div>
+
+  <div class="sheet" role="document">
+    <div class="sheet__core">
+
+      <div class="sheet__top">
+        <span class="sheet__brand">
+          <svg role="img" aria-label="Colégio ZH+"><use href="#zh-logo"/></svg>
+        </span>
+        <span class="sheet__count" id="counter">01 / 09</span>
+        <button class="x" data-close aria-label="Fechar formulário">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="bar" role="progressbar" aria-label="Progresso do cadastro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress">
+        <span class="bar__fill" id="fill"></span>
+      </div>
+
+      <form class="sheet__body" id="form" novalidate>
+
+        <!-- 1 · UNIDADE -->
+        <section class="q" data-step="unidade" data-active>
+          <span class="q__kicker">Passo 1 · A escola</span>
+          <h3 id="q-title">Qual unidade fica melhor para vocês?</h3>
+          <p class="q__help">Você escolhe agora e ajusta depois, se precisar.</p>
+          <div class="opts" role="group" aria-label="Unidade de interesse">
+            <button type="button" class="opt" data-val="Icaraí" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span>
+              <span class="opt__txt">Icaraí <small>Niterói</small></span>
+            </button>
+            <button type="button" class="opt" data-val="Méier" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span>
+              <span class="opt__txt">Méier <small>Rio de Janeiro</small></span>
+            </button>
+            <button type="button" class="opt" data-val="Vila Isabel" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span>
+              <span class="opt__txt">Vila Isabel <small>Rio de Janeiro</small></span>
+            </button>
+          </div>
+          <p class="err" id="err-unidade"><svg aria-hidden="true"><use href="#alert"/></svg> Escolha uma unidade para continuar.</p>
+        </section>
+
+        <!-- 2 · TURMA -->
+        <section class="q" data-step="turma" hidden>
+          <span class="q__kicker">Passo 2 · A turma</span>
+          <h3>Para qual turma é o interesse?</h3>
+          <p class="q__help">Selecione o ano ou série que seu filho vai cursar em 2026.</p>
+
+          <div class="group">
+            <span class="group__label">Educação Infantil</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="Infantil N1" data-advance>Infantil N1</button>
+              <button type="button" class="chip" data-val="Infantil N2" data-advance>Infantil N2</button>
+              <button type="button" class="chip" data-val="Infantil N3" data-advance>Infantil N3</button>
+              <button type="button" class="chip" data-val="Infantil N4" data-advance>Infantil N4</button>
+              <button type="button" class="chip" data-val="Infantil N5" data-advance>Infantil N5</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <span class="group__label">Fundamental · Anos iniciais</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="1º Ano - Ensino Fundamental Anos Iniciais" data-advance>1º ano</button>
+              <button type="button" class="chip" data-val="2º Ano - Ensino Fundamental Anos Iniciais" data-advance>2º ano</button>
+              <button type="button" class="chip" data-val="3º Ano - Ensino Fundamental Anos Iniciais" data-advance>3º ano</button>
+              <button type="button" class="chip" data-val="4º Ano - Ensino Fundamental Anos Iniciais" data-advance>4º ano</button>
+              <button type="button" class="chip" data-val="5º Ano - Ensino Fundamental Anos Iniciais" data-advance>5º ano</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <span class="group__label">Fundamental · Anos finais</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="6º Ano - Ensino Fundamental Anos Finais" data-advance>6º ano</button>
+              <button type="button" class="chip" data-val="7º Ano - Ensino Fundamental Anos Finais" data-advance>7º ano</button>
+              <button type="button" class="chip" data-val="8º Ano - Ensino Fundamental Anos Finais" data-advance>8º ano</button>
+              <button type="button" class="chip" data-val="9º Ano - Ensino Fundamental Anos Finais" data-advance>9º ano</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <span class="group__label">Ensino Médio</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="1ª Série - Ensino Médio" data-advance>1ª série</button>
+              <button type="button" class="chip" data-val="2ª Série - Ensino Médio" data-advance>2ª série</button>
+              <button type="button" class="chip" data-val="3ª Série - Ensino Médio" data-advance>3ª série</button>
+              <button type="button" class="chip" data-val="Pré-Vestibular" data-advance>Pré-Vestibular</button>
+            </div>
+          </div>
+          <p class="err" id="err-turma"><svg aria-hidden="true"><use href="#alert"/></svg> Selecione a turma de interesse.</p>
+        </section>
+
+        <!-- 3 · NOME DO CANDIDATO -->
+        <section class="q" data-step="candidato" hidden>
+          <span class="q__kicker">Passo 3 · O candidato</span>
+          <h3>Qual o nome completo do seu filho?</h3>
+          <p class="q__help">É assim que vamos chamá-lo no dia da visita.</p>
+          <div class="field">
+            <label class="sr" for="i-candidato">Nome completo do candidato</label>
+            <input class="inp" id="i-candidato" type="text" autocomplete="off" placeholder="Nome completo do candidato" enterkeyhint="next">
+          </div>
+          <p class="err" id="err-candidato"><svg aria-hidden="true"><use href="#alert"/></svg> Escreva o nome completo (nome e sobrenome).</p>
+        </section>
+
+        <!-- 4 · ORIGEM ESCOLAR -->
+        <section class="q" data-step="origem" hidden>
+          <span class="q__kicker">Passo 4 · Trajetória</span>
+          <h3>O candidato vem de escola…</h3>
+          <p class="q__help">Isso ajuda a equipe a preparar a conversa com a família.</p>
+          <div class="opts opts--3" role="group" aria-label="Origem escolar">
+            <button type="button" class="opt" data-val="Particular" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span><span class="opt__txt">Particular</span>
+            </button>
+            <button type="button" class="opt" data-val="Pública" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span><span class="opt__txt">Pública</span>
+            </button>
+            <button type="button" class="opt" data-val="Não Estuda" data-advance>
+              <span class="opt__dot" aria-hidden="true"></span><span class="opt__txt">Não estuda</span>
+            </button>
+          </div>
+          <p class="err" id="err-origem"><svg aria-hidden="true"><use href="#alert"/></svg> Escolha uma das opções.</p>
+        </section>
+
+        <!-- 5 · COLÉGIO ATUAL (condicional) -->
+        <section class="q" data-step="colegio" hidden>
+          <span class="q__kicker">Passo 5 · Trajetória</span>
+          <h3>Em qual colégio ele estuda hoje?</h3>
+          <p class="q__help">Pode ser o nome popular da escola, sem formalidade.</p>
+          <div class="field">
+            <label class="sr" for="i-colegio">Colégio atual</label>
+            <input class="inp" id="i-colegio" type="text" autocomplete="off" placeholder="Colégio atual" enterkeyhint="next">
+          </div>
+          <p class="err" id="err-colegio"><svg aria-hidden="true"><use href="#alert"/></svg> Informe o colégio atual.</p>
+        </section>
+
+        <!-- 6 · RESPONSÁVEL -->
+        <section class="q" data-step="responsavel" hidden>
+          <span class="q__kicker">Passo 6 · A família</span>
+          <h3>E o seu nome, quem responde por ele?</h3>
+          <p class="q__help">Nome do responsável pelo candidato.</p>
+          <div class="field">
+            <label class="sr" for="i-responsavel">Nome do responsável</label>
+            <input class="inp" id="i-responsavel" type="text" autocomplete="name" placeholder="Nome do responsável" enterkeyhint="next">
+          </div>
+          <p class="err" id="err-responsavel"><svg aria-hidden="true"><use href="#alert"/></svg> Escreva o nome completo do responsável.</p>
+        </section>
+
+        <!-- 7 · WHATSAPP -->
+        <section class="q" data-step="whatsapp" hidden>
+          <span class="q__kicker">Passo 7 · Contato</span>
+          <h3>Qual WhatsApp usamos para falar com você?</h3>
+          <p class="q__help">Com DDD. É por aqui que combinamos o dia da visita.</p>
+          <div class="field">
+            <label class="sr" for="i-whatsapp">WhatsApp com DDD</label>
+            <input class="inp" id="i-whatsapp" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(21) 96925-2117" enterkeyhint="next">
+          </div>
+          <p class="err" id="err-whatsapp"><svg aria-hidden="true"><use href="#alert"/></svg> Informe um número válido com DDD.</p>
+        </section>
+
+        <!-- 8 · E-MAIL -->
+        <section class="q" data-step="email" hidden>
+          <span class="q__kicker">Passo 8 · Contato</span>
+          <h3>E o e-mail do responsável?</h3>
+          <p class="q__help">Enviamos a confirmação do agendamento por lá.</p>
+          <div class="field">
+            <label class="sr" for="i-email">E-mail do responsável</label>
+            <input class="inp" id="i-email" type="email" inputmode="email" autocomplete="email" placeholder="voce@email.com" enterkeyhint="next">
+          </div>
+          <p class="err" id="err-email"><svg aria-hidden="true"><use href="#alert"/></svg> Digite um e-mail válido.</p>
+        </section>
+
+        <!-- 9 · REVISÃO -->
+        <section class="q" data-step="revisao" hidden>
+          <span class="q__kicker">Último passo · Confirmação</span>
+          <h3>Está tudo certo?</h3>
+          <p class="q__help">Toque em “editar” para corrigir qualquer resposta.</p>
+          <dl class="review" id="review"></dl>
+          <label class="consent">
+            <input type="checkbox" id="i-consent">
+            <span class="consent__box" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#chk"/></svg></span>
+            <span>Autorizo o Colégio ZH+ a usar estes dados para entrar em contato sobre a visita e o processo de admissão.</span>
+          </label>
+          <p class="err" id="err-consent"><svg aria-hidden="true"><use href="#alert"/></svg> Precisamos da sua autorização para continuar.</p>
+        </section>
+
+        <!-- 10 · SUCESSO -->
+        <section class="q" data-step="sucesso" hidden>
+          <div class="done">
+            <div class="done__ring">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#chk"/></svg>
+            </div>
+            <h3>Cadastro enviado!</h3>
+            <p>A equipe de admissão do ZH+ vai falar com você pelo WhatsApp para combinar o melhor dia e horário.</p>
+            <div class="done__card">
+              <div class="in" id="done-card"></div>
+            </div>
+          </div>
+          <div class="confetti" id="confetti" aria-hidden="true"></div>
+        </section>
+
+      </form>
+
+      <div class="sheet__foot" id="foot">
+        <button type="button" class="back" id="back" hidden>
+          <svg aria-hidden="true"><use href="#arw-l"/></svg> Voltar
+        </button>
+        <span class="grow"></span>
+        <span class="kbd" id="kbd"><b>Enter</b> para continuar</span>
+        <button type="button" class="btn btn--sm" id="next">
+          <span id="next-label">Continuar</span>
+          <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  $('#ano').textContent = new Date().getFullYear();
+
+  /* ==========================================================
+     1. NAV — estado de scroll, menu mobile, dock
+     ========================================================== */
+  const nav = $('#nav'), burger = $('#burger'), menu = $('#menu'), dock = $('#dock');
+
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 24);
+    dock.classList.toggle('show', y > 620 && !document.body.classList.contains('is-locked'));
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setMenu = (open) => {
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    document.body.classList.toggle('is-locked', open);
+  };
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+  $$('#menu a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+  /* ==========================================================
+     2. REVEAL DE SCROLL — IntersectionObserver, nunca listener
+     ========================================================== */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+  $$('.reveal').forEach(el => io.observe(el));
+  requestAnimationFrame(() => $('#hero').classList.add('in'));
+
+  /* ==========================================================
+     3. ABAS DOS CICLOS — indicador deslizante
+     ========================================================== */
+  const tabs = $$('.cycles__tab'), ind = $('.cycles__ind');
+
+  const moveInd = () => {
+    const active = $('.cycles__tab[aria-selected="true"]');
+    if (!active) return;
+    ind.style.width = active.offsetWidth + 'px';
+    ind.style.transform = `translateX(${active.offsetLeft}px)`;
+  };
+
+  const selectTab = (btn) => {
+    tabs.forEach(t => { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
+    btn.setAttribute('aria-selected', 'true');
+    btn.tabIndex = 0;
+    moveInd();
+    $$('.cycle').forEach(c => {
+      const on = c.id === 'cy-' + btn.dataset.cy;
+      c.toggleAttribute('data-active', on);
+      c.hidden = !on;
+      c.classList.remove('anim');
+      if (on && !reduced) { void c.offsetWidth; c.classList.add('anim'); }
+    });
+    btn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reduced ? 'auto' : 'smooth' });
+  };
+
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', (e) => {
+      const map = { ArrowRight: 1, ArrowLeft: -1 };
+      if (!(e.key in map)) return;
+      e.preventDefault();
+      const nextTab = tabs[(i + map[e.key] + tabs.length) % tabs.length];
+      nextTab.focus();
+      selectTab(nextTab);
+    });
+  });
+  window.addEventListener('resize', moveInd, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveInd);
+  requestAnimationFrame(moveInd);
+
+  /* ==========================================================
+     4. FORMULÁRIO EM MODAL — uma pergunta por vez
+     ========================================================== */
+  const modal    = $('#modal');
+  const sheet    = $('.sheet');
+  const body     = $('#form');
+  const steps    = $$('.q');
+  const btnNext  = $('#next');
+  const lblNext  = $('#next-label');
+  const btnBack  = $('#back');
+  const counter  = $('#counter');
+  const fill     = $('#fill');
+  const progress = $('#progress');
+  const foot     = $('#foot');
+  const kbd      = $('#kbd');
+
+  const LABELS = {
+    unidade:     'Unidade',
+    turma:       'Turma',
+    candidato:   'Candidato',
+    origem:      'Vem de escola',
+    colegio:     'Colégio atual',
+    responsavel: 'Responsável',
+    whatsapp:    'WhatsApp',
+    email:       'E-mail'
+  };
+  const ORDER = Object.keys(LABELS);
+  const data = {};
+  let idx = 0, lastFocus = null, sending = false;
+
+  const stepAt = (i) => steps[i];
+  const nameAt = (i) => steps[i].dataset.step;
+
+  /* Passo 'colegio' some quando o candidato não estuda */
+  const isSkipped = (i) => nameAt(i) === 'colegio' && data.origem === 'Não Estuda';
+
+  const visibleSteps = () => steps.filter((_, i) => !isSkipped(i) && nameAt(i) !== 'sucesso');
+  const totalVisible = () => visibleSteps().length;
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  function paint() {
+    const name = nameAt(idx);
+    const done = name === 'sucesso';
+    const list = visibleSteps();
+    const pos  = done ? list.length : list.indexOf(stepAt(idx)) + 1;
+
+    counter.textContent = done ? 'Concluído' : `${pad(pos)} / ${pad(list.length)}`;
+    const pct = done ? 100 : Math.round((pos - 1) / list.length * 100);
+    fill.style.width = (done ? 100 : Math.max(pct, 4)) + '%';
+    progress.setAttribute('aria-valuenow', String(done ? 100 : pct));
+
+    btnBack.hidden = done || pos <= 1;
+    foot.style.display = done ? 'none' : '';
+    kbd.style.visibility = (name === 'unidade' || name === 'turma' || name === 'origem') ? 'hidden' : 'visible';
+    lblNext.textContent = name === 'revisao' ? 'Enviar cadastro' : 'Continuar';
+  }
+
+  function focusStep() {
+    const el = stepAt(idx);
+    const target = el.querySelector('.inp, .opt, .chip, #i-consent');
+    if (target && window.innerWidth > 720) {
+      target.focus({ preventScroll: true });
+    }
+    body.scrollTop = 0;
+  }
+
+  function show(i, dir = 1) {
+    steps.forEach(s => { s.hidden = true; s.removeAttribute('data-active'); s.classList.remove('enter', 'enter-back'); });
+    idx = i;
+    const el = stepAt(i);
+    el.hidden = false;
+    el.setAttribute('data-active', '');
+    void el.offsetWidth;
+    el.classList.add(dir >= 0 ? 'enter' : 'enter-back');
+    paint();
+    focusStep();
+  }
+
+  function nextIndex(from, dir) {
+    let i = from + dir;
+    while (i > 0 && i < steps.length && isSkipped(i)) i += dir;
+    return Math.max(0, Math.min(i, steps.length - 1));
+  }
+
+  /* ---------- Validação ---------- */
+  const showErr = (name, on) => {
+    const err = $('#err-' + name);
+    if (err) err.classList.toggle('show', on);
+    const el = stepAt(idx);
+    const inp = el.querySelector('.inp');
+    if (inp) inp.setAttribute('aria-invalid', String(on));
+    if (on) {
+      const box = inp || el.querySelector('.opts, .chips');
+      if (box && !reduced) { box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); }
+    }
+  };
+
+  const digits = (s) => (s || '').replace(/\D/g, '');
+
+  function validate() {
+    const name = nameAt(idx);
+    let ok = true;
+    if (name === 'unidade' || name === 'turma' || name === 'origem') {
+      ok = !!data[name];
+    } else if (name === 'candidato' || name === 'responsavel') {
+      const v = ($('#i-' + name).value || '').trim();
+      ok = v.length >= 5 && v.includes(' ');
+      if (ok) data[name] = v.replace(/\s+/g, ' ');
+    } else if (name === 'colegio') {
+      const v = ($('#i-colegio').value || '').trim();
+      ok = v.length >= 2;
+      if (ok) data.colegio = v;
+    } else if (name === 'whatsapp') {
+      const d = digits($('#i-whatsapp').value);
+      ok = d.length >= 10 && d.length <= 11;
+      if (ok) data.whatsapp = $('#i-whatsapp').value.trim();
+    } else if (name === 'email') {
+      const v = ($('#i-email').value || '').trim();
+      ok = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v);
+      if (ok) data.email = v;
+    } else if (name === 'revisao') {
+      ok = $('#i-consent').checked;
+      if (!ok) showErr('consent', true);
+      return ok;
+    }
+    showErr(name, !ok);
+    return ok;
+  }
+
+  /* ---------- Revisão ---------- */
+  function buildReview() {
+    const dl = $('#review');
+    dl.innerHTML = '';
+    ORDER.forEach((k) => {
+      if (k === 'colegio' && data.origem === 'Não Estuda') return;
+      const i = steps.findIndex(s => s.dataset.step === k);
+      const row = document.createElement('div');
+      row.className = 'review__row';
+      row.innerHTML = `<dt>${LABELS[k]}</dt><dd>${escapeHtml(data[k] || '—')}<button type="button" data-goto="${i}">editar</button></dd>`;
+      dl.appendChild(row);
+    });
+    $$('#review [data-goto]').forEach(b => b.addEventListener('click', () => show(+b.dataset.goto, -1)));
+  }
+
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /* ---------- Envio ---------- */
+  function submit() {
+    if (sending) return;
+    sending = true;
+    lblNext.textContent = 'Enviando…';
+    btnNext.disabled = true;
+    btnNext.style.opacity = '.7';
+
+    /* Simulação de envio. Troque este bloco pelo POST real do formulário. */
+    setTimeout(() => {
+      sending = false;
+      btnNext.disabled = false;
+      btnNext.style.opacity = '';
+      const card = $('#done-card');
+      card.innerHTML = '';
+      [['Unidade', data.unidade], ['Turma', data.turma], ['Candidato', data.candidato], ['Contato', data.whatsapp]]
+        .forEach(([k, v]) => {
+          const d = document.createElement('div');
+          d.innerHTML = `<span>${k}</span><span>${escapeHtml(v || '—')}</span>`;
+          card.appendChild(d);
+        });
+      show(steps.findIndex(s => s.dataset.step === 'sucesso'), 1);
+      confetti();
+    }, 1100);
+  }
+
+  function confetti() {
+    if (reduced) return;
+    const box = $('#confetti');
+    box.innerHTML = '';
+    const cols = ['#B2FE02', '#00DFC2', '#F1EE73', '#2BC9C9', '#229494'];
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement('i');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.background = cols[i % cols.length];
+      s.style.animationDelay = (Math.random() * .45) + 's';
+      s.style.animationDuration = (1.8 + Math.random() * 1.2) + 's';
+      s.style.width = s.style.height = (4 + Math.random() * 6) + 'px';
+      if (i % 3 === 0) s.style.borderRadius = '50%';
+      box.appendChild(s);
+    }
+  }
+
+  /* ---------- Avançar / voltar ---------- */
+  function advance() {
+    const name = nameAt(idx);
+    if (!validate()) return;
+    if (name === 'revisao') return submit();
+    const to = nextIndex(idx, 1);
+    if (nameAt(to) === 'revisao') buildReview();
+    show(to, 1);
+  }
+
+  btnNext.addEventListener('click', advance);
+  btnBack.addEventListener('click', () => show(nextIndex(idx, -1), -1));
+
+  /* Seleção em cartões e chips: marca, limpa erro e avança sozinho */
+  $$('.opt, .chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sec = btn.closest('.q');
+      const key = sec.dataset.step;
+      $$('.opt, .chip', sec).forEach(o => o.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      data[key] = btn.dataset.val;
+      showErr(key, false);
+      if (btn.hasAttribute('data-advance')) {
+        setTimeout(() => {
+          const to = nextIndex(idx, 1);
+          if (nameAt(to) === 'revisao') buildReview();
+          show(to, 1);
+        }, reduced ? 0 : 170);
+      }
+    });
+  });
+
+  $('#i-consent').addEventListener('change', (e) => { if (e.target.checked) showErr('consent', false); });
+
+  /* Enter avança; digitar limpa o erro */
+  body.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    if (e.target.tagName === 'BUTTON') return;
+    e.preventDefault();
+    advance();
+  });
+  body.addEventListener('submit', (e) => e.preventDefault());
+  $$('.inp').forEach(inp => inp.addEventListener('input', () => showErr(nameAt(idx), false)));
+
+  /* Máscara de WhatsApp */
+  const tel = $('#i-whatsapp');
+  tel.addEventListener('input', () => {
+    const d = digits(tel.value).slice(0, 11);
+    let v = d;
+    if (d.length > 2)  v = `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length > 7)  v = `(${d.slice(0, 2)}) ${d.slice(2, d.length > 10 ? 7 : 6)}-${d.slice(d.length > 10 ? 7 : 6)}`;
+    tel.value = v;
+  });
+
+  /* ---------- Abrir / fechar ---------- */
+  const FOCUSABLE = 'button:not([disabled]), [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  function openModal(trigger) {
+    lastFocus = trigger || document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('is-locked');
+    dock.classList.remove('show');
+
+    /* Pré-seleção vinda do botão (unidade ou turma) */
+    const pre = trigger && trigger.dataset ? trigger.dataset : {};
+    let start = 0;
+    if (pre.unidade) {
+      const b = $$('.q[data-step="unidade"] .opt').find(o => o.dataset.val === pre.unidade);
+      if (b) { b.setAttribute('aria-pressed', 'true'); data.unidade = pre.unidade; start = 1; }
+    }
+    if (pre.turma) {
+      const c = $$('.q[data-step="turma"] .chip').find(o => o.dataset.val === pre.turma);
+      if (c) { c.setAttribute('aria-pressed', 'true'); data.turma = pre.turma; }
+    }
+    show(start, 1);
+    setTimeout(() => focusStep(), 260);
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('is-locked');
+    onScroll();
+    if (lastFocus) lastFocus.focus({ preventScroll: true });
+  }
+
+  $$('.js-open').forEach(b => b.addEventListener('click', () => openModal(b)));
+  $$('[data-close]').forEach(b => b.addEventListener('click', closeModal));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (modal.classList.contains('open')) return closeModal();
+      if (menu.classList.contains('open')) return setMenu(false);
+    }
+    if (e.key === 'Tab' && modal.classList.contains('open')) {
+      const f = $$(FOCUSABLE, sheet).filter(el => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>
+
