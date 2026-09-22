@@ -12,11 +12,12 @@ const assert = require('assert');
 
 const BASE = { AC_API_URL: 'https://teste.api-us1.com', AC_API_KEY: 'chave-de-teste' };
 
+/* Espelha o que a página manda hoje. "origem" saiu do formulário por decisão
+   da direção, então não aparece aqui, mas o servidor continua aceitando. */
 const leadValido = {
   unidade: 'Icaraí',
   turma: 'Infantil N3',
   candidato: 'Maria Clara Souza',
-  origem: 'Particular',
   colegio: 'Escola Girassol',
   responsavel: 'Ana Paula Souza',
   whatsapp: '(21) 96925-2117',
@@ -68,6 +69,8 @@ async function executar(body, env = BASE, opts = {}) {
     assert.strictEqual(campos['12'], 'Infantil N3', 'campo 12 deve levar a turma');
     assert.strictEqual(campos['72'], 'Maria Clara Souza', 'campo 72 deve levar o nome do aluno');
     assert.strictEqual(campos['46'], 'Infantil', 'segmento deve sair de Infantil');
+    assert.strictEqual(campos['8'], 'Escola Girassol', 'campo 8 deve levar o colégio atual');
+    assert.ok(!('23' in campos), 'campo 23 não pode ir: a pergunta saiu do formulário');
     assert.strictEqual(sync.corpo.contact.firstName, 'Ana');
     assert.strictEqual(sync.corpo.contact.lastName, 'Paula Souza');
     const lista = chamadas.find((c) => c.url.includes('/contactLists'));
@@ -117,9 +120,29 @@ async function executar(body, env = BASE, opts = {}) {
   }
 
   {
-    const { res } = await executar({ ...leadValido, origem: 'Não Estuda', colegio: '' });
-    assert.strictEqual(res.code, 200, '"Não Estuda" dispensa o colégio atual');
-    console.log('ok  "Não Estuda" dispensa colégio atual');
+    /* Na Educação Infantil é comum o candidato ainda não estudar. */
+    const { res, chamadas } = await executar({ ...leadValido, colegio: '' });
+    assert.strictEqual(res.code, 200, 'colégio atual em branco deve ser aceito');
+    const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+    const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [f.field, f.value]));
+    assert.ok(!('8' in campos), 'colégio vazio não pode ir e apagar o que já existia no contato');
+    console.log('ok  colégio atual em branco é aceito e não apaga o valor antigo');
+  }
+
+  {
+    /* Caminho de volta: se a direção reativar a pergunta, o servidor já grava. */
+    const { res, chamadas } = await executar({ ...leadValido, origem: 'Particular' });
+    assert.strictEqual(res.code, 200);
+    const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+    const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [f.field, f.value]));
+    assert.strictEqual(campos['23'], 'Particular', 'origem escolar volta a ser gravada se vier');
+    console.log('ok  origem escolar continua suportada para quando for reativada');
+  }
+
+  {
+    const { res } = await executar({ ...leadValido, origem: 'Semi-particular' });
+    assert.strictEqual(res.code, 400, 'origem fora da lista continua recusada');
+    console.log('ok  origem escolar inválida é recusada');
   }
 
   {

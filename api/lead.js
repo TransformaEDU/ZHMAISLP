@@ -23,7 +23,7 @@ const CAMPO = {
   unidade:     1,   // Unidade (de interesse)
   turma:       12,  // Turma (de interesse)
   aluno:       72,  // Nome do aluno
-  origem:      23,  // O candidato vem de escola
+  origem:      23,  // O candidato vem de escola (desativado na página, ver ORIGENS)
   colegio:     8,   // Colégio atual
   responsavel: 7,   // Nome completo do Responsável
   fonte:       3,   // Fonte de cadastro
@@ -60,6 +60,10 @@ const TURMAS_POR_UNIDADE = {
   'Vila Isabel': [...FUND1],
 };
 
+/* "O candidato vem de escola" está desativado na página por decisão da direção
+   (22/09/2026). O suporte continua aqui, e o campo é aceito se vier: para
+   reativar, basta devolver a seção data-step="origem" ao index.html. Enquanto
+   não vier, o campo 23 simplesmente não é enviado ao ActiveCampaign. */
 const ORIGENS = ['Particular', 'Pública', 'Não Estuda'];
 
 const texto = (v, max) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, max);
@@ -79,7 +83,7 @@ function validar(body) {
   const turmas = TURMAS_POR_UNIDADE[d.unidade];
   if (!turmas) return { erro: 'Unidade inválida.' };
   if (!turmas.includes(d.turma)) return { erro: 'Essa turma não é oferecida na unidade escolhida.' };
-  if (!ORIGENS.includes(d.origem)) return { erro: 'Origem escolar inválida.' };
+  if (d.origem && !ORIGENS.includes(d.origem)) return { erro: 'Origem escolar inválida.' };
   if (d.candidato.length < 5 || !d.candidato.includes(' ')) return { erro: 'Informe o nome completo do candidato.' };
   if (d.responsavel.length < 5 || !d.responsavel.includes(' ')) return { erro: 'Informe o nome completo do responsável.' };
   if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(d.email)) return { erro: 'E-mail inválido.' };
@@ -87,8 +91,9 @@ function validar(body) {
   const digitos = d.whatsapp.replace(/\D/g, '');
   if (digitos.length < 10 || digitos.length > 11) return { erro: 'WhatsApp inválido. Informe DDD e número.' };
 
-  /* "Não Estuda" dispensa o colégio atual; nos outros casos ele é obrigatório. */
-  if (d.origem !== 'Não Estuda' && d.colegio.length < 2) return { erro: 'Informe o colégio atual.' };
+  /* Colégio atual é opcional: na Educação Infantil é comum o candidato ainda
+     não estudar, e sem a pergunta de origem escolar não há como distinguir
+     "não informou" de "não estuda". Quem não preencher segue em frente. */
   if (d.origem === 'Não Estuda') d.colegio = '';
 
   return { dados: d, digitos };
@@ -169,13 +174,16 @@ module.exports = async function handler(req, res) {
     campo(CAMPO.unidade, dados.unidade),
     campo(CAMPO.turma, dados.turma),
     campo(CAMPO.aluno, dados.candidato),
-    campo(CAMPO.origem, dados.origem),
-    campo(CAMPO.colegio, dados.colegio),
     campo(CAMPO.responsavel, dados.responsavel),
     campo(CAMPO.fonte, FONTE),
     campo(CAMPO.campanha, CAMPANHA),
     campo(CAMPO.segmento, dados.turma.startsWith('Infantil') ? 'Infantil' : 'Fundamental 1'),
   ];
+
+  /* Campos opcionais entram só quando vêm preenchidos. Mandar string vazia
+     apagaria o que já estivesse gravado num contato que voltou a se cadastrar. */
+  if (dados.origem) fieldValues.push(campo(CAMPO.origem, dados.origem));
+  if (dados.colegio) fieldValues.push(campo(CAMPO.colegio, dados.colegio));
 
   /* Só gravamos os UTM de última origem. Os "first_" ficam intocados para não
      apagar o primeiro contato de quem já existia na base. */
