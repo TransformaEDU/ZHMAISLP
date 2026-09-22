@@ -139,13 +139,28 @@ async function obterTagId(base, chave) {
 }
 
 module.exports = async function handler(req, res) {
+  const base = process.env.AC_API_URL;
+  const chave = process.env.AC_API_KEY;
+
+  /* GET /api/lead?check=1 apenas autentica no ActiveCampaign e diz se a
+     credencial passa. Não cria, não altera e não lê dado de contato, então
+     serve para conferir a configuração sem sujar o CRM com lead de teste.
+     Útil também quando a chave for rotacionada. */
+  if (req.method === 'GET' && req.query && req.query.check) {
+    if (!base || !chave) return res.status(503).json({ ok: false, ac: 'variaveis ausentes' });
+    try {
+      const r = await chamarAC('/api/3/users/me', { base, chave, ms: 8000 });
+      return res.status(r.ok ? 200 : 502).json({ ok: r.ok, ac: r.ok ? 'credencial aceita' : 'credencial recusada', status: r.status });
+    } catch (e) {
+      return res.status(502).json({ ok: false, ac: e?.name === 'AbortError' ? 'sem resposta' : 'falha na chamada' });
+    }
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, erro: 'Método não permitido.' });
   }
 
-  const base = process.env.AC_API_URL;
-  const chave = process.env.AC_API_KEY;
   if (!base || !chave) {
     console.error('[lead] AC_API_URL ou AC_API_KEY ausente no ambiente');
     return res.status(503).json({ ok: false, erro: 'Integração indisponível no momento.' });
