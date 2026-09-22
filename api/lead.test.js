@@ -11,6 +11,8 @@
 const assert = require('assert');
 
 const BASE = { AC_API_URL: 'https://teste.api-us1.com', AC_API_KEY: 'chave-de-teste' };
+const TL = { TECHLITHY_ACCOUNT_ID: 'c72973c2-0000-0000-0000-000000000000', TECHLITHY_API_TOKEN: 'lsk_teste' };
+const AMBOS = { ...BASE, ...TL };
 
 /* Espelha o que a página manda hoje. "origem" e "colegio" saíram do formulário
    por decisão da direção, então não aparecem aqui, mas o servidor continua
@@ -34,10 +36,11 @@ function resFalso() {
 }
 
 /* Substitui a rede por respostas fixas e registra o que foi chamado. */
-function mockarFetch(chamadas, { syncOk = true, listaOk = true } = {}) {
+function mockarFetch(chamadas, { syncOk = true, listaOk = true, tlOk = true } = {}) {
   global.fetch = async (url, opts) => {
-    chamadas.push({ url: String(url), metodo: opts.method, corpo: opts.body ? JSON.parse(opts.body) : null });
+    chamadas.push({ url: String(url), metodo: opts.method, headers: opts.headers, corpo: opts.body ? JSON.parse(opts.body) : null });
     const resp = (ok, obj) => ({ ok, status: ok ? 200 : 500, text: async () => JSON.stringify(obj) });
+    if (String(url).includes('crm.techlithy.com')) return resp(tlOk, { ok: tlOk });
     if (String(url).includes('/contact/sync')) return resp(syncOk, { contact: { id: '999' } });
     if (String(url).includes('/contactLists')) return resp(listaOk, { contactList: { id: '1' } });
     if (String(url).includes('/api/3/tags?')) return resp(true, { tags: [{ id: '4242', tag: 'LP Infantil ao 5º Ano - ZH+ 2027' }] });
@@ -47,7 +50,7 @@ function mockarFetch(chamadas, { syncOk = true, listaOk = true } = {}) {
 }
 
 async function executar(body, env = BASE, opts = {}) {
-  for (const k of Object.keys(process.env)) if (k.startsWith('AC_')) delete process.env[k];
+  for (const k of Object.keys(process.env)) if (k.startsWith('AC_') || k.startsWith('TECHLITHY_')) delete process.env[k];
   Object.assign(process.env, env);
   delete require.cache[require.resolve('./lead.js')];
   const handler = require('./lead.js');
@@ -163,6 +166,71 @@ async function executar(body, env = BASE, opts = {}) {
     const { res } = await executar(leadValido, BASE, { listaOk: false });
     assert.strictEqual(res.code, 502, 'falha ao inscrever na lista não pode virar sucesso');
     console.log('ok  falha na lista devolve 502, nunca sucesso falso');
+  }
+
+  /* ------------------------------------------------------ TechLithy --- */
+
+  {
+    const { res, chamadas } = await executar({ ...leadValido, utm: { utm_source: 'instagram', utm_campaign: 'matriculas' } }, AMBOS);
+    assert.strictEqual(res.code, 200);
+    const tl = chamadas.find((c) => c.url.includes('crm.techlithy.com'));
+    assert.ok(tl, 'deve chamar o webhook do TechLithy');
+    const u = new URL(tl.url);
+    assert.strictEqual(u.pathname, '/webhook/lead-intake/' + TL.TECHLITHY_ACCOUNT_ID, 'uuid da conta vai no caminho');
+    assert.strictEqual(u.searchParams.get('utm_source'), 'instagram', 'utm_source vai na query');
+    assert.ok(!('utm_source' in tl.corpo), 'utm_source não pode ir no corpo');
+    assert.strictEqual(tl.headers.Authorization, 'Bearer lsk_teste');
+    assert.strictEqual(tl.headers['Content-Type'], 'application/json');
+    assert.strictEqual(tl.headers.Origin, 'https://infantil.zhmais.com.br', 'CRM confere a origem');
+    assert.strictEqual(tl.corpo['form-field-field_bff5e55'], 'Ana Paula Souza', 'Nome = responsável');
+    assert.strictEqual(tl.corpo['form-field-email'], 'ana@exemplo.com');
+    assert.strictEqual(tl.corpo['form-field-message'], '+55 21 96925-2117', 'Telefone');
+    assert.strictEqual(tl.corpo['form-field-field_924fc50'], 'Icaraí', 'Unidade');
+    assert.deepStrictEqual(tl.corpo['form-field-field_0a78d11'], ['Infantil N3'], 'Turma vai como array');
+    assert.strictEqual(tl.corpo['form-field-name'], 'Maria Clara Souza', 'Aluno');
+    assert.match(tl.corpo.external_id, /^lp-infantil-zhmais-2027-[0-9a-f-]{36}$/);
+    assert.ok(chamadas.some((c) => c.url.includes('/contact/sync')), 'AC continua recebendo');
+    console.log('ok  TechLithy recebe o lead no contrato do guia, junto com o AC');
+  }
+
+  {
+    const a = await executar(leadValido, AMBOS);
+    const b = await executar(leadValido, AMBOS);
+    const id = (r) => r.chamadas.find((c) => c.url.includes('crm.techlithy.com')).corpo.external_id;
+    assert.notStrictEqual(id(a), id(b), 'external_id precisa ser único por envio');
+    console.log('ok  external_id é único a cada envio');
+  }
+
+  {
+    const { res } = await executar(leadValido, AMBOS, { syncOk: false });
+    assert.strictEqual(res.code, 200, 'AC fora e TechLithy ok: o lead não se perde');
+    console.log('ok  AC falhando não derruba o TechLithy');
+  }
+
+  {
+    const { res } = await executar(leadValido, AMBOS, { tlOk: false });
+    assert.strictEqual(res.code, 200, 'TechLithy fora e AC ok: o lead não se perde');
+    console.log('ok  TechLithy falhando não derruba o AC');
+  }
+
+  {
+    const { res } = await executar(leadValido, AMBOS, { syncOk: false, tlOk: false });
+    assert.strictEqual(res.code, 502, 'os dois fora: nunca sucesso falso');
+    console.log('ok  os dois CRMs falhando devolve 502');
+  }
+
+  {
+    const { res, chamadas } = await executar(leadValido, TL);
+    assert.strictEqual(res.code, 200);
+    assert.ok(chamadas.every((c) => c.url.includes('crm.techlithy.com')), 'sem env do AC, só o TechLithy é chamado');
+    console.log('ok  só com as variáveis do TechLithy a rota funciona');
+  }
+
+  {
+    const { chamadas } = await executar(leadValido, AMBOS);
+    const tl = chamadas.find((c) => c.url.includes('crm.techlithy.com'));
+    assert.ok(!new URL(tl.url).search, 'sem UTM, a URL vai sem query');
+    console.log('ok  sem UTM a URL do webhook vai limpa');
   }
 
   console.log('\ntodos os testes passaram');
