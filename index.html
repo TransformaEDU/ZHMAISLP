@@ -3,12 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cadastro Infantil — Colégio ZH+ | Agende sua visita</title>
-<meta name="description" content="Agende uma visita ao Colégio ZH+ e conheça de perto o lugar onde seu filho vai aprender, crescer e ser feliz. Unidades Icaraí, Méier e Vila Isabel. Matrículas 2026 abertas.">
+<title>Educação Infantil e 1º ao 5º ano — Colégio ZH+ | Agende sua visita</title>
+<meta name="description" content="Agende uma visita ao Colégio ZH+ e conheça de perto o lugar onde seu filho vai aprender, crescer e ser feliz. Educação Infantil em Icaraí; 1º ao 5º ano em Icaraí, Méier e Vila Isabel. Matrículas 2027 abertas.">
 <meta name="theme-color" content="#0F5C5C">
-<meta property="og:title" content="Cadastro Infantil — Colégio ZH+">
+<link rel="canonical" href="https://infantil.zhmais.com.br/">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Educação Infantil e 1º ao 5º ano — Colégio ZH+">
 <meta property="og:description" content="Inovação que inspira, excelência que transforma. Agende sua visita.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://infantil.zhmais.com.br/">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -268,8 +273,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .hero__copy{position:relative;z-index:2}
 .hero h1{font-size:clamp(2.1rem,4.15vw,3.4rem);margin:1.35rem 0 0;font-weight:600;letter-spacing:-.048em}
 .hero h1 .ln{display:block;overflow:hidden;white-space:nowrap}
-.hero h1 .ln span{display:block;transform:translateY(105%);transition:transform 1050ms var(--drawer)}
-.hero.in h1 .ln span{transform:translateY(0)}
+.hero h1 .ln > span{display:block;transform:translateY(105%);transition:transform 1050ms var(--drawer)}
+.hero.in h1 .ln > span{transform:translateY(0)}
 .hero.in h1 .ln:nth-child(2) span{transition-delay:70ms}
 .hero.in h1 .ln:nth-child(3) span{transition-delay:140ms}
 .hero__lede{margin-top:1.5rem;max-width:46ch}
@@ -324,8 +329,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 @media (max-width:920px){
   .hero h1 .ln{white-space:normal;overflow:visible}
-  .hero h1 .ln span{transform:none;opacity:0;transition:opacity 700ms var(--out)}
-  .hero.in h1 .ln span{opacity:1}
+  .hero h1 .ln > span{transform:none;opacity:0;transition:opacity 700ms var(--out)}
+  .hero.in h1 .ln > span{opacity:1}
   .hero__grid{grid-template-columns:1fr;gap:3rem}
   .hero__visual{order:-1;max-width:26rem;margin-inline:auto;width:100%}
   .float-card{left:-.5rem}
@@ -373,7 +378,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .reveal[data-d="4"]{transition-delay:280ms}
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;filter:none;transition:none}
-  .hero h1 .ln span{transform:none}
+  .hero h1 .ln > span{transform:none}
 }
 
 /* ============================================================
@@ -838,7 +843,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   </div>
   <div class="shell hero__grid">
     <div class="hero__copy">
-      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Matrículas 2026 abertas</span>
+      <span class="eyebrow"><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> Matrículas 2027 abertas</span>
       <h1>
         <span class="ln"><span>Descubra de perto o lugar</span></span>
         <span class="ln"><span>onde seu filho vai</span></span>
@@ -855,8 +860,14 @@ button,input,select,textarea{font:inherit;color:inherit}
           <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
         </a>
       </div>
+      <!-- A oferta não é igual nas três unidades: a Educação Infantil existe
+           só em Icaraí. Dizer isso aqui evita a família descobrir no passo 2. -->
       <div class="hero__units">
-        <span>Três unidades no Rio:</span>
+        <span>Educação Infantil:</span>
+        <span class="unit-chip">Icaraí</span>
+      </div>
+      <div class="hero__units" style="margin-top:.8rem">
+        <span>Do 1º ao 5º ano:</span>
         <span class="unit-chip">Icaraí</span>
         <span class="unit-chip">Méier</span>
         <span class="unit-chip">Vila Isabel</span>
@@ -906,9 +917,7 @@ button,input,select,textarea{font:inherit;color:inherit}
       <div class="cycles__tabs" role="tablist" aria-label="Ciclos de aprendizagem">
         <span class="cycles__ind" aria-hidden="true"></span>
         <button class="cycles__tab" role="tab" aria-selected="true"  aria-controls="cy-1" id="tab-1" data-cy="1">Educação Infantil</button>
-        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-2" id="tab-2" data-cy="2" tabindex="-1">Fundamental I</button>
-        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-3" id="tab-3" data-cy="3" tabindex="-1">Fundamental II</button>
-        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-4" id="tab-4" data-cy="4" tabindex="-1">Ensino Médio</button>
+        <button class="cycles__tab" role="tab" aria-selected="false" aria-controls="cy-2" id="tab-2" data-cy="2" tabindex="-1">1º ao 5º ano</button>
       </div>
 
       <div class="cycles__stage">
@@ -921,9 +930,10 @@ button,input,select,textarea{font:inherit;color:inherit}
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Rotina acolhedora, com adaptação respeitosa ao tempo de cada criança</li>
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Brincar como linguagem central da aprendizagem</li>
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Comunicação constante com a família sobre cada avanço</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Disponível na unidade de Icaraí, em Niterói</li>
             </ul>
-            <button class="btn btn--sm js-open" data-src="ciclo-infantil" data-turma="Infantil N3" style="margin-top:2rem">
-              Agendar visita para a Infantil
+            <button class="btn btn--sm js-open" data-src="ciclo-infantil" data-unidade="Icaraí" style="margin-top:2rem">
+              Agendar visita em Icaraí
               <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
             </button>
           </div>
@@ -937,15 +947,16 @@ button,input,select,textarea{font:inherit;color:inherit}
         <div class="cycle" id="cy-2" role="tabpanel" aria-labelledby="tab-2" hidden>
           <div class="cycle__txt">
             <span class="cycle__age">1º ao 5º ano</span>
-            <h3>Fundamental I</h3>
+            <h3>Ensino Fundamental, anos iniciais</h3>
             <p>Atividades para estimular a capacidade de expressão verbal e textual, a interpretação de texto e a formação de leitores.</p>
             <ul class="cycle__list">
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Alfabetização e letramento com acompanhamento individualizado</li>
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Projetos que ligam o conteúdo à vida real da criança</li>
               <li><svg aria-hidden="true"><use href="#spark"/></svg> Equilíbrio entre desenvolvimento acadêmico, artístico e esportivo</li>
+              <li><svg aria-hidden="true"><use href="#spark"/></svg> Disponível em Icaraí, Méier e Vila Isabel</li>
             </ul>
-            <button class="btn btn--sm js-open" data-src="ciclo-fund1" data-turma="3º Ano - Ensino Fundamental Anos Iniciais" style="margin-top:2rem">
-              Agendar visita para o Fund I
+            <button class="btn btn--sm js-open" data-src="ciclo-fund1" style="margin-top:2rem">
+              Agendar visita
               <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
             </button>
           </div>
@@ -956,49 +967,6 @@ button,input,select,textarea{font:inherit;color:inherit}
           </div>
         </div>
 
-        <div class="cycle" id="cy-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-          <div class="cycle__txt">
-            <span class="cycle__age">6º ao 9º ano</span>
-            <h3>Fundamental II</h3>
-            <p>Momento de desenvolver a análise crítica, o raciocínio lógico e uma visão global e cidadã, para uma aprendizagem significativa.</p>
-            <ul class="cycle__list">
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Autonomia de estudo e organização da rotina</li>
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Programas de tecnologia, robótica e línguas</li>
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Olhar socioemocional atento à adolescência</li>
-            </ul>
-            <button class="btn btn--sm js-open" data-src="ciclo-fund2" data-turma="7º Ano - Ensino Fundamental Anos Finais" style="margin-top:2rem">
-              Agendar visita para o Fund II
-              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
-            </button>
-          </div>
-          <div class="cycle__art">
-            <div class="core" style="background:linear-gradient(150deg,var(--mint),var(--teal))">
-              <span class="glyph">6—9</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="cycle" id="cy-4" role="tabpanel" aria-labelledby="tab-4" hidden>
-          <div class="cycle__txt">
-            <span class="cycle__age">1ª à 3ª série e Pré-Vestibular</span>
-            <h3>Ensino Médio</h3>
-            <p>Na 1ª e 2ª séries, os estudantes revisitam conhecimentos aplicados à vida e à realidade deles. Já na 3ª série, eles se preparam para os vestibulares.</p>
-            <ul class="cycle__list">
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Preparação consistente para ENEM e vestibulares</li>
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Projeto de vida e escolha profissional acompanhados de perto</li>
-              <li><svg aria-hidden="true"><use href="#spark"/></svg> Material e recursos das melhores soluções educacionais do país</li>
-            </ul>
-            <button class="btn btn--sm js-open" data-src="ciclo-medio" data-turma="1ª Série - Ensino Médio" style="margin-top:2rem">
-              Agendar visita para o Médio
-              <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
-            </button>
-          </div>
-          <div class="cycle__art">
-            <div class="core" style="background:linear-gradient(150deg,var(--teal-bright),var(--teal-deep))">
-              <img src="https://colegiozhmais.com.br/wp-content/uploads/2025/05/fund-2-zh-mais-mulher.webp" alt="Estudante do Ensino Médio do Colégio ZH+" loading="lazy" decoding="async">
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1062,6 +1030,7 @@ button,input,select,textarea{font:inherit;color:inherit}
           <span class="unit__n">Unidade 01</span>
           <h3>Icaraí</h3>
           <p>Niterói. Estrutura completa da Educação Infantil ao Ensino Médio, num bairro que respira convivência.</p>
+          <span class="unit__n">Educação Infantil · 1º ao 5º ano</span>
           <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Icaraí">
             Agendar em Icaraí
             <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
@@ -1073,6 +1042,7 @@ button,input,select,textarea{font:inherit;color:inherit}
           <span class="unit__n">Unidade 02</span>
           <h3>Méier</h3>
           <p>Zona Norte do Rio. Tradição de ensino somada às soluções educacionais mais atuais do país.</p>
+          <span class="unit__n">1º ao 5º ano</span>
           <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Méier">
             Agendar no Méier
             <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
@@ -1084,6 +1054,7 @@ button,input,select,textarea{font:inherit;color:inherit}
           <span class="unit__n">Unidade 03</span>
           <h3>Vila Isabel</h3>
           <p>Rio de Janeiro. Ambiente acolhedor e estimulante, com escuta constante das famílias.</p>
+          <span class="unit__n">1º ao 5º ano</span>
           <button class="btn btn--sm btn--lime js-open" data-src="unidade" data-unidade="Vila Isabel">
             Agendar em Vila Isabel
             <span class="btn__nest"><svg aria-hidden="true"><use href="#arw"/></svg></span>
@@ -1252,6 +1223,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 
       <form class="sheet__body" id="form" novalidate>
 
+        <!-- Isca anti-robô: fora do fluxo visual e do foco, e escondida do leitor
+             de tela. Gente nunca preenche; se vier preenchido, o servidor descarta. -->
+        <div class="sr" aria-hidden="true">
+          <label for="i-website">Deixe este campo em branco</label>
+          <input id="i-website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+
         <!-- 1 · UNIDADE -->
         <section class="q" data-step="unidade" data-active>
           <span class="q__kicker">Passo 1 · A escola</span>
@@ -1278,7 +1257,7 @@ button,input,select,textarea{font:inherit;color:inherit}
         <section class="q" data-step="turma" hidden>
           <span class="q__kicker">Passo 2 · A turma</span>
           <h3>Para qual turma é o interesse?</h3>
-          <p class="q__help">Selecione o ano ou série que seu filho vai cursar em 2026.</p>
+          <p class="q__help">Selecione o ano ou série que seu filho vai cursar em 2027.</p>
 
           <!-- Turmas do segmento Infantil ao 5º Ano, produto ZH+.
                data-uni lista as unidades que oferecem cada turma, separadas por "|".
@@ -1399,6 +1378,7 @@ button,input,select,textarea{font:inherit;color:inherit}
             <span>Autorizo o Colégio ZH+ a usar estes dados para entrar em contato sobre a visita e o processo de admissão.</span>
           </label>
           <p class="err" id="err-consent"><svg aria-hidden="true"><use href="#alert"/></svg> Precisamos da sua autorização para continuar.</p>
+          <p class="err" id="err-envio"><svg aria-hidden="true"><use href="#alert"/></svg> <span id="err-envio-txt"></span></p>
         </section>
 
         <!-- 10 · SUCESSO -->
@@ -1548,7 +1528,11 @@ button,input,select,textarea{font:inherit;color:inherit}
   };
   const ORDER = Object.keys(LABELS);
   const data = {};
-  let idx = 0, lastFocus = null, sending = false;
+  let idx = 0, lastFocus = null, sending = false, origemAtual = '-';
+
+  /* Sem role="alert" o leitor de tela não anuncia o erro: a mensagem aparece
+     na tela e a pessoa cega fica sem saber por que o formulário não avançou. */
+  $$('.err').forEach(e => e.setAttribute('role', 'alert'));
 
   const stepAt = (i) => steps[i];
   const nameAt = (i) => steps[i].dataset.step;
@@ -1687,18 +1671,52 @@ button,input,select,textarea{font:inherit;color:inherit}
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* ---------- Envio ---------- */
-  function submit() {
+
+  /* Os parâmetros de campanha são lidos uma vez, na chegada, e guardados na
+     sessão: a pessoa costuma rolar a página antes de abrir o formulário, e o
+     histórico pode ter perdido a query original até lá. */
+  const utm = (() => {
+    const p = new URLSearchParams(location.search);
+    const atual = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid']
+      .forEach(k => { const v = p.get(k); if (v) atual[k] = v.slice(0, 200); });
+    try {
+      const guardado = JSON.parse(sessionStorage.getItem('zh_utm') || '{}');
+      const valor = Object.keys(atual).length ? atual : guardado;
+      sessionStorage.setItem('zh_utm', JSON.stringify(valor));
+      return valor;
+    } catch { return atual; }
+  })();
+
+  async function submit() {
     if (sending) return;
     sending = true;
+    showErr('envio', false);
     lblNext.textContent = 'Enviando…';
     btnNext.disabled = true;
     btnNext.style.opacity = '.7';
 
-    /* Simulação de envio. Troque este bloco pelo POST real do formulário. */
-    setTimeout(() => {
-      sending = false;
-      btnNext.disabled = false;
-      btnNext.style.opacity = '';
+    try {
+      const r = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          consentimento: $('#i-consent').checked,
+          website: $('#i-website').value,
+          origemPagina: origemAtual,
+          utm
+        })
+      });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j || j.ok !== true) {
+        /* Marcamos a mensagem como própria para nunca vazar texto de erro
+           técnico do navegador na tela de quem está preenchendo. */
+        const falha = new Error((j && j.erro) || 'Não foi possível enviar agora. Tente novamente em instantes.');
+        falha.amigavel = true;
+        throw falha;
+      }
+
       const card = $('#done-card');
       card.innerHTML = '';
       [['Unidade', data.unidade], ['Turma', data.turma], ['Candidato', data.candidato], ['Contato', data.whatsapp]]
@@ -1709,7 +1727,19 @@ button,input,select,textarea{font:inherit;color:inherit}
         });
       show(steps.findIndex(s => s.dataset.step === 'sucesso'), 1);
       confetti();
-    }, 1100);
+    } catch (e) {
+      /* O cadastro continua preenchido na tela, então é só tocar em enviar de novo. */
+      $('#err-envio-txt').textContent = (e && e.amigavel)
+        ? e.message
+        : 'Não conseguimos enviar agora. Confira sua conexão e toque em enviar novamente.';
+      console.error('[cadastro] falha no envio', e);
+      showErr('envio', true);
+    } finally {
+      sending = false;
+      btnNext.disabled = false;
+      btnNext.style.opacity = '';
+      lblNext.textContent = 'Enviar cadastro';
+    }
   }
 
   function confetti() {
@@ -1788,6 +1818,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
   function openModal(trigger) {
     lastFocus = trigger || document.activeElement;
+    origemAtual = (trigger && trigger.dataset && trigger.dataset.src) || '-';
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('is-locked');
