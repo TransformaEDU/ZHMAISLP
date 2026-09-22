@@ -491,6 +491,21 @@ button,input,select,textarea{font:inherit;color:inherit}
 @media (hover:hover) and (pointer:fine){
   .unit:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 40px 80px -40px rgba(0,0,0,.6)}
 }
+
+/* Fachada da unidade. A proporção é fixa nos três cards para a grade não
+   desalinhar quando uma foto ainda não chegou: sem foto, fica um bloco na cor
+   da marca com a estrela, em vez de um buraco no meio da linha. */
+.unit__photo{
+  align-self:stretch;aspect-ratio:16/9;overflow:hidden;
+  border-radius:calc(var(--r-shell) - 1.1rem);
+  background:linear-gradient(150deg, var(--teal), var(--teal-abyss));
+  box-shadow:var(--inner-dark);
+}
+.unit__photo img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform 900ms var(--out)}
+@media (hover:hover) and (pointer:fine){ .unit:hover .unit__photo img{transform:scale(1.04)} }
+.unit__photo--sem-foto{display:grid;place-items:center}
+.unit__photo--sem-foto svg{width:2.6rem;height:2.6rem;fill:rgba(255,255,255,.22)}
 .unit__n{font-family:var(--font-display);font-size:var(--t-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);opacity:.8}
 .unit h3{font-size:var(--t-xl)}
 .unit p{font-size:var(--t-sm);color:rgba(255,255,255,.62);flex:1}
@@ -1032,6 +1047,13 @@ button,input,select,textarea{font:inherit;color:inherit}
     <div class="units">
       <article class="unit reveal">
         <div class="unit__core">
+          <!-- Sem foto real da fachada de Icaraí até agora. O arquivo recebido
+               foi gerado por IA, com marca d'água do Gemini e texto ilegível
+               num dos banners, então não entra. Trocar este bloco por
+               <img src="img/unidade-icarai.webp" ...> quando a foto chegar. -->
+          <div class="unit__photo unit__photo--sem-foto" aria-hidden="true">
+            <svg><use href="#spark"/></svg>
+          </div>
           <span class="unit__n">Unidade 01</span>
           <h3>Icaraí</h3>
           <p>Niterói. Estrutura completa da Educação Infantil ao Ensino Médio, num bairro que respira convivência.</p>
@@ -1044,6 +1066,11 @@ button,input,select,textarea{font:inherit;color:inherit}
       </article>
       <article class="unit reveal" data-d="1">
         <div class="unit__core">
+          <div class="unit__photo">
+            <img src="img/unidade-meier.webp"
+                 alt="Fachada da unidade do Méier do Colégio ZH+, com o portão de entrada e a placa vertical"
+                 width="960" height="540" loading="lazy" decoding="async">
+          </div>
           <span class="unit__n">Unidade 02</span>
           <h3>Méier</h3>
           <p>Zona Norte do Rio. Tradição de ensino somada às soluções educacionais mais atuais do país.</p>
@@ -1056,6 +1083,11 @@ button,input,select,textarea{font:inherit;color:inherit}
       </article>
       <article class="unit reveal" data-d="2">
         <div class="unit__core">
+          <div class="unit__photo">
+            <img src="img/unidade-vila-isabel.webp"
+                 alt="Fachada da unidade de Vila Isabel do Colégio ZH+, vista da rua"
+                 width="960" height="540" loading="lazy" decoding="async">
+          </div>
           <span class="unit__n">Unidade 03</span>
           <h3>Vila Isabel</h3>
           <p>Rio de Janeiro. Ambiente acolhedor e estimulante, com escuta constante das famílias.</p>
