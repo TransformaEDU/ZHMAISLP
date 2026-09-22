@@ -1075,7 +1075,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     <div class="steps">
       <div class="step reveal">
         <h3>Você faz o cadastro</h3>
-        <p>São sete perguntas rápidas, uma de cada vez. Leva cerca de dois minutos e pode ser feito pelo celular.</p>
+        <p>São seis perguntas rápidas, uma de cada vez. Leva cerca de dois minutos e pode ser feito pelo celular.</p>
       </div>
       <div class="step reveal" data-d="1">
         <h3>A equipe entra em contato</h3>
@@ -1124,7 +1124,7 @@ button,input,select,textarea{font:inherit;color:inherit}
       </details>
       <details class="qa reveal" data-d="1">
         <summary>Quanto tempo leva para preencher?<span class="qa__plus" aria-hidden="true"></span></summary>
-        <div class="qa__body">Cerca de dois minutos. São sete perguntas, apresentadas uma de cada vez, e você pode voltar e corrigir qualquer resposta antes de enviar.</div>
+        <div class="qa__body">Cerca de dois minutos. São seis perguntas, apresentadas uma de cada vez, e você pode voltar e corrigir qualquer resposta antes de enviar.</div>
       </details>
       <details class="qa reveal" data-d="1">
         <summary>Posso conhecer mais de uma unidade?<span class="qa__plus" aria-hidden="true"></span></summary>
@@ -1132,7 +1132,7 @@ button,input,select,textarea{font:inherit;color:inherit}
       </details>
       <details class="qa reveal" data-d="2">
         <summary>E se meu filho ainda não estuda?<span class="qa__plus" aria-hidden="true"></span></summary>
-        <div class="qa__body">Sem problema, e é bem comum na Educação Infantil. A pergunta sobre o colégio atual é opcional: se ele ainda não estuda, deixe em branco e siga para a próxima.</div>
+        <div class="qa__body">Sem problema, e é bem comum na Educação Infantil. O cadastro não pergunta nada sobre escola anterior: é só preencher e agendar a visita.</div>
       </details>
       <details class="qa reveal" data-d="2">
         <summary>Quem entra em contato depois do envio?<span class="qa__plus" aria-hidden="true"></span></summary>
@@ -1299,20 +1299,9 @@ button,input,select,textarea{font:inherit;color:inherit}
           <p class="err" id="err-candidato"><svg aria-hidden="true"><use href="#alert"/></svg> Escreva o nome completo (nome e sobrenome).</p>
         </section>
 
-        <!-- 4 · COLÉGIO ATUAL (opcional: muita criança da Infantil ainda não estuda) -->
-        <section class="q" data-step="colegio" hidden>
-          <span class="q__kicker">Passo 4 · Trajetória</span>
-          <h3>Em qual colégio ele estuda hoje?</h3>
-          <p class="q__help">Pode ser o nome popular da escola, sem formalidade. Se ainda não estuda, é só continuar.</p>
-          <div class="field">
-            <label class="sr" for="i-colegio">Colégio atual, se já estiver na escola</label>
-            <input class="inp" id="i-colegio" type="text" autocomplete="off" placeholder="Colégio atual (opcional)" enterkeyhint="next">
-          </div>
-        </section>
-
-        <!-- 6 · RESPONSÁVEL -->
+        <!-- 4 · RESPONSÁVEL -->
         <section class="q" data-step="responsavel" hidden>
-          <span class="q__kicker">Passo 5 · A família</span>
+          <span class="q__kicker">Passo 4 · A família</span>
           <h3>E o seu nome, quem responde por ele?</h3>
           <p class="q__help">Nome do responsável pelo candidato.</p>
           <div class="field">
@@ -1324,7 +1313,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
         <!-- 7 · WHATSAPP -->
         <section class="q" data-step="whatsapp" hidden>
-          <span class="q__kicker">Passo 6 · Contato</span>
+          <span class="q__kicker">Passo 5 · Contato</span>
           <h3>Qual WhatsApp usamos para falar com você?</h3>
           <p class="q__help">Com DDD. É por aqui que combinamos o dia da visita.</p>
           <div class="field">
@@ -1336,7 +1325,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
         <!-- 8 · E-MAIL -->
         <section class="q" data-step="email" hidden>
-          <span class="q__kicker">Passo 7 · Contato</span>
+          <span class="q__kicker">Passo 6 · Contato</span>
           <h3>E o e-mail do responsável?</h3>
           <p class="q__help">Enviamos a confirmação do agendamento por lá.</p>
           <div class="field">
@@ -1500,7 +1489,6 @@ button,input,select,textarea{font:inherit;color:inherit}
     unidade:     'Unidade',
     turma:       'Turma',
     candidato:   'Candidato',
-    colegio:     'Colégio atual',
     responsavel: 'Responsável',
     whatsapp:    'WhatsApp',
     email:       'E-mail'
@@ -1612,10 +1600,6 @@ button,input,select,textarea{font:inherit;color:inherit}
       const v = ($('#i-' + name).value || '').trim();
       ok = v.length >= 5 && v.includes(' ');
       if (ok) data[name] = v.replace(/\s+/g, ' ');
-    } else if (name === 'colegio') {
-      /* Opcional: na Educação Infantil é comum o candidato ainda não estudar. */
-      data.colegio = ($('#i-colegio').value || '').trim().replace(/\s+/g, ' ');
-      return true;
     } else if (name === 'whatsapp') {
       const d = digits($('#i-whatsapp').value);
       ok = d.length >= 10 && d.length <= 11;
@@ -1638,8 +1622,6 @@ button,input,select,textarea{font:inherit;color:inherit}
     const dl = $('#review');
     dl.innerHTML = '';
     ORDER.forEach((k) => {
-      /* O colégio atual é opcional, então some da revisão quando vier vazio. */
-      if (k === 'colegio' && !data.colegio) return;
       const i = steps.findIndex(s => s.dataset.step === k);
       const row = document.createElement('div');
       row.className = 'review__row';

@@ -23,8 +23,8 @@ const CAMPO = {
   unidade:     1,   // Unidade (de interesse)
   turma:       12,  // Turma (de interesse)
   aluno:       72,  // Nome do aluno
-  origem:      23,  // O candidato vem de escola (desativado na página, ver ORIGENS)
-  colegio:     8,   // Colégio atual
+  origem:      23,  // O candidato vem de escola (desativado na página)
+  colegio:     8,   // Colégio atual (desativado na página)
   responsavel: 7,   // Nome completo do Responsável
   fonte:       3,   // Fonte de cadastro
   segmento:    46,  // Segmento
@@ -60,10 +60,11 @@ const TURMAS_POR_UNIDADE = {
   'Vila Isabel': [...FUND1],
 };
 
-/* "O candidato vem de escola" está desativado na página por decisão da direção
-   (22/09/2026). O suporte continua aqui, e o campo é aceito se vier: para
-   reativar, basta devolver a seção data-step="origem" ao index.html. Enquanto
-   não vier, o campo 23 simplesmente não é enviado ao ActiveCampaign. */
+/* "O candidato vem de escola" e "Colégio atual" saíram do formulário por
+   decisão da direção (22/09/2026). O suporte continua aqui e os dois campos
+   são aceitos se vierem: reativar é devolver a seção correspondente ao
+   index.html, nada mais. Enquanto não vierem, os campos 23 e 8 simplesmente
+   não são enviados ao ActiveCampaign. */
 const ORIGENS = ['Particular', 'Pública', 'Não Estuda'];
 
 const texto = (v, max) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim().slice(0, max);
@@ -91,9 +92,6 @@ function validar(body) {
   const digitos = d.whatsapp.replace(/\D/g, '');
   if (digitos.length < 10 || digitos.length > 11) return { erro: 'WhatsApp inválido. Informe DDD e número.' };
 
-  /* Colégio atual é opcional: na Educação Infantil é comum o candidato ainda
-     não estudar, e sem a pergunta de origem escolar não há como distinguir
-     "não informou" de "não estuda". Quem não preencher segue em frente. */
   if (d.origem === 'Não Estuda') d.colegio = '';
 
   return { dados: d, digitos };
