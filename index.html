@@ -1047,12 +1047,15 @@ button,input,select,textarea{font:inherit;color:inherit}
     <div class="units">
       <article class="unit reveal">
         <div class="unit__core">
-          <!-- Sem foto real da fachada de Icaraí até agora. O arquivo recebido
-               foi gerado por IA, com marca d'água do Gemini e texto ilegível
-               num dos banners, então não entra. Trocar este bloco por
-               <img src="img/unidade-icarai.webp" ...> quando a foto chegar. -->
-          <div class="unit__photo unit__photo--sem-foto" aria-hidden="true">
-            <svg><use href="#spark"/></svg>
+          <!-- Atenção ao trocar esta imagem: o arquivo de origem é gerado por
+               IA e traz, num banner da entrada, uma linha de texto embaralhado.
+               O enquadramento atual foi recortado justamente para deixar esse
+               trecho fora. Usar o arquivo original sem recorte publica o
+               defeito. O ideal segue sendo uma fotografia real da fachada. -->
+          <div class="unit__photo">
+            <img src="img/unidade-icarai.webp"
+                 alt="Entrada da unidade de Icaraí do Colégio ZH+, em Niterói"
+                 width="1600" height="900" loading="lazy" decoding="async">
           </div>
           <span class="unit__n">Unidade 01</span>
           <h3>Icaraí</h3>
