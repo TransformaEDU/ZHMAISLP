@@ -182,12 +182,12 @@ async function executar(body, env = BASE, opts = {}) {
     assert.strictEqual(tl.headers.Authorization, 'Bearer lsk_teste');
     assert.strictEqual(tl.headers['Content-Type'], 'application/json');
     assert.strictEqual(tl.headers.Origin, 'https://infantil.zhmais.com.br', 'CRM confere a origem');
-    assert.strictEqual(tl.corpo['form-field-field_bff5e55'], 'Ana Paula Souza', 'Nome = responsável');
+    assert.strictEqual(tl.corpo['form-field-name'], 'Ana Paula Souza', 'Nome = responsável');
     assert.strictEqual(tl.corpo['form-field-email'], 'ana@exemplo.com');
-    assert.strictEqual(tl.corpo['form-field-message'], '+55 21 96925-2117', 'Telefone');
-    assert.strictEqual(tl.corpo['form-field-field_924fc50'], 'Icaraí', 'Unidade');
-    assert.deepStrictEqual(tl.corpo['form-field-field_0a78d11'], ['Infantil N3'], 'Turma vai como array');
-    assert.strictEqual(tl.corpo['form-field-name'], 'Maria Clara Souza', 'Aluno');
+    assert.strictEqual(tl.corpo['form-field-field_b9d9940'], '+55 21 96925-2117', 'Telefone');
+    assert.strictEqual(tl.corpo['form-field-field_f7903d6'], 'Icaraí', 'Unidade');
+    assert.deepStrictEqual(tl.corpo['form-field-field_009575c'], ['Infantil N3'], 'Turma vai como array');
+    assert.strictEqual(tl.corpo['form-field-field_0d0c50e'], 'Maria Clara Souza', 'Aluno');
     assert.match(tl.corpo.external_id, /^lp-infantil-zhmais-2027-[0-9a-f-]{36}$/);
     assert.ok(chamadas.some((c) => c.url.includes('/contact/sync')), 'AC continua recebendo');
     console.log('ok  TechLithy recebe o lead no contrato do guia, junto com o AC');

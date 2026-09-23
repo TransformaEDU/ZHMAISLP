@@ -245,29 +245,33 @@ async function enviarAC({ dados, digitos, utm, base, chave }) {
    - utm_source vai na QUERY da URL, não no corpo
    - external_id único por envio, com prefixo que identifica o formulário
 
-   As chaves abaixo são as do "Mapeamento de campos" já configurado no CRM
-   para o formulário ZeroHum (tabela da seção 1.1 do guia). Chave que não
-   está no mapeamento chega ao CRM mas se perde sem erro, então não mandamos
-   nada além delas.
+   Os leads vão para a empresa "Colégio ZH+" no CRM, fonte própria da LP
+   "LP Infantil ZH+ (infantil.zhmais.com.br)" (TECHLITHY_ACCOUNT_ID é o uuid
+   da URL dessa fonte). As chaves abaixo são as do "Mapeamento de campos"
+   dela, iguais às do formulário do site colegiozhmais.com.br (23/09/2026). Chave fora do mapeamento cai nas Observações do lead.
 
-   O CRM também confere o cabeçalho Origin contra as origens autorizadas da
-   fonte de leads: origem fora da lista devolve 403
-   ORIGEM_NAO_AUTORIZADA_PARA_ESTA_FONTE_DE_LEADS. */
+   A Unidade é resolvida pelo NOME entre as unidades da empresa (Icaraí,
+   Méier, Vila Isabel): nome que não existe lá chega vazio, sem erro.
+
+   O CRM também confere o cabeçalho Origin contra os domínios autorizados da
+   fonte: origem fora da lista devolve 403
+   ORIGEM_NAO_AUTORIZADA_PARA_ESTA_FONTE_DE_LEADS. O 202 de resposta só quer
+   dizer "na fila"; o lead é criado depois, de forma assíncrona. */
 const TL_BASE = 'https://crm.techlithy.com/webhook/lead-intake/';
 const TL_PREFIXO = 'lp-infantil-zhmais-2027-';
 const TL_ORIGEM = 'https://infantil.zhmais.com.br';
 
 function payloadTechLithy({ dados, digitos }) {
   const p = {
-    'form-field-name':          dados.candidato,        // Aluno
+    'form-field-name':          dados.responsavel,      // Nome (responsável)
     'form-field-email':         dados.email,            // E-mail
-    'form-field-message':       '+55 ' + telefoneFormatado(digitos).replace(/[()]/g, ''), // Telefone
-    'form-field-field_0a78d11': [dados.turma],          // Turma (array)
-    'form-field-field_924fc50': dados.unidade,          // Unidade
-    'form-field-field_bff5e55': dados.responsavel,      // Nome (responsável)
+    'form-field-field_b9d9940': '+55 ' + telefoneFormatado(digitos).replace(/[()]/g, ''), // Telefone
+    'form-field-field_009575c': [dados.turma],          // Turma (array)
+    'form-field-field_0d0c50e': dados.candidato,        // Aluno
+    'form-field-field_f7903d6': dados.unidade,          // Unidade
   };
-  if (dados.origem) p['form-field-field_95cab32'] = dados.origem;   // Vem de escola
-  if (dados.colegio) p['form-field-field_85f402d'] = dados.colegio; // Colégio atual
+  if (dados.origem) p['form-field-field_c0ade34'] = dados.origem;   // Vem de escola
+  if (dados.colegio) p['form-field-field_b203060'] = dados.colegio; // Colégio atual
   p.external_id = TL_PREFIXO + randomUUID();
   return p;
 }
