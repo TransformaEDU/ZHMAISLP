@@ -43,6 +43,37 @@ const CAMPO = {
   lastTerm:    86,
   lastFbclid:  87,
   lastGclid:   88,
+  lastMsclkid: 89,
+  firstSource:   74,
+  firstMedium:   75,
+  firstCampaign: 76,
+  firstContent:  77,
+  firstTerm:     78,
+  firstFbclid:   79,
+  firstGclid:    80,
+  firstMsclkid:  81,
+};
+
+/* Chave que a página manda -> campo personalizado do ActiveCampaign.
+   A página envia primeira e última origem já separadas; aqui não há
+   interpretação, só transporte. */
+const MAPA_ATRIBUICAO = {
+  first_utm_source:   CAMPO.firstSource,
+  first_utm_medium:   CAMPO.firstMedium,
+  first_utm_campaign: CAMPO.firstCampaign,
+  first_utm_content:  CAMPO.firstContent,
+  first_utm_term:     CAMPO.firstTerm,
+  first_fbclid:       CAMPO.firstFbclid,
+  first_gclid:        CAMPO.firstGclid,
+  first_msclkid:      CAMPO.firstMsclkid,
+  last_utm_source:    CAMPO.lastSource,
+  last_utm_medium:    CAMPO.lastMedium,
+  last_utm_campaign:  CAMPO.lastCampaign,
+  last_utm_content:   CAMPO.lastContent,
+  last_utm_term:      CAMPO.lastTerm,
+  last_fbclid:        CAMPO.lastFbclid,
+  last_gclid:         CAMPO.lastGclid,
+  last_msclkid:       CAMPO.lastMsclkid,
 };
 
 const LISTA_ID = 78;                                  // Formulários 2027
@@ -154,7 +185,7 @@ function telefoneFormatado(digitos) {
 /* ---------------------------------------------------------------- AC --- */
 
 /* Devolve true se o lead ficou gravado e inscrito na lista. Nunca lança. */
-async function enviarAC({ dados, digitos, utm, base, chave }) {
+async function enviarAC({ dados, digitos, utm, atribuicao, base, chave }) {
   const partes = dados.responsavel.split(' ');
   const campo = (id, value) => ({ field: String(id), value: value || '' });
 
@@ -173,18 +204,37 @@ async function enviarAC({ dados, digitos, utm, base, chave }) {
   if (dados.origem) fieldValues.push(campo(CAMPO.origem, dados.origem));
   if (dados.colegio) fieldValues.push(campo(CAMPO.colegio, dados.colegio));
 
-  /* Só gravamos os UTM de última origem. Os "first_" ficam intocados para não
-     apagar o primeiro contato de quem já existia na base. */
-  const utms = [
-    [CAMPO.utmSource, utm.utm_source], [CAMPO.lastSource, utm.utm_source],
-    [CAMPO.lastMedium, utm.utm_medium], [CAMPO.lastCampaign, utm.utm_campaign],
-    [CAMPO.lastContent, utm.utm_content], [CAMPO.lastTerm, utm.utm_term],
-    [CAMPO.lastFbclid, utm.fbclid], [CAMPO.lastGclid, utm.gclid],
-  ];
-  for (const [id, valor] of utms) {
+  /* Atribuição de campanha. Um Map por id de campo, porque os dois contratos
+     abaixo podem alimentar o mesmo campo e só o último valor deve valer —
+     mandar o mesmo id duas vezes no fieldValues é comportamento indefinido.
+
+     Campo vazio nunca é enviado: string vazia apagaria o que já estivesse
+     gravado num contato que voltou a se cadastrar. */
+  const valoresAtribuicao = new Map();
+  const anotar = (id, valor) => {
     const v = texto(valor, 200);
-    if (v) fieldValues.push(campo(id, v));
-  }
+    if (v) valoresAtribuicao.set(id, v);
+  };
+
+  /* Contrato antigo: a página mandava só `utm`, com a última origem. Fica aqui
+     porque um navegador com a página anterior em cache continua mandando assim
+     por algumas horas depois do deploy. */
+  anotar(CAMPO.utmSource, utm.utm_source);
+  anotar(CAMPO.lastSource, utm.utm_source);
+  anotar(CAMPO.lastMedium, utm.utm_medium);
+  anotar(CAMPO.lastCampaign, utm.utm_campaign);
+  anotar(CAMPO.lastContent, utm.utm_content);
+  anotar(CAMPO.lastTerm, utm.utm_term);
+  anotar(CAMPO.lastFbclid, utm.fbclid);
+  anotar(CAMPO.lastGclid, utm.gclid);
+
+  /* Contrato atual: `atribuicao` traz primeira e última origem separadas. O
+     primeiro toque é imutável no navegador, então o que chega aqui já é a
+     origem que trouxe a pessoa pela primeira vez, não a desta visita. */
+  for (const [chave, id] of Object.entries(MAPA_ATRIBUICAO)) anotar(id, atribuicao[chave]);
+  anotar(CAMPO.utmSource, atribuicao.last_utm_source);
+
+  for (const [id, v] of valoresAtribuicao) fieldValues.push(campo(id, v));
 
   try {
     const sync = await chamarAC('/api/3/contact/sync', {
@@ -277,9 +327,11 @@ function payloadTechLithy({ dados, digitos }) {
 }
 
 /* Devolve true se o CRM respondeu 2xx. Nunca lança. */
-async function enviarTechLithy({ dados, digitos, utm, conta, token, ms = 8000 }) {
+async function enviarTechLithy({ dados, digitos, utm, atribuicao, conta, token, ms = 8000 }) {
   const url = new URL(TL_BASE + encodeURIComponent(conta));
-  const origem = texto(utm.utm_source, 200);
+  /* A última origem é a que interessa aqui: é a campanha que trouxe a pessoa
+     desta vez. O `utm` legado cobre a página em cache. */
+  const origem = texto(atribuicao.last_utm_source || utm.utm_source, 200);
   if (origem) url.searchParams.set('utm_source', origem);
 
   const corpo = payloadTechLithy({ dados, digitos });
@@ -352,13 +404,16 @@ module.exports = async function handler(req, res) {
   if (erro) return res.status(400).json({ ok: false, erro });
 
   const utm = body.utm && typeof body.utm === 'object' ? body.utm : {};
+  /* Atribuição corrompida (tipo errado, JSON estranho) vira "sem atribuição",
+     nunca erro de validação: perde-se a origem da lead, jamais a lead. */
+  const atribuicao = body.atribuicao && typeof body.atribuicao === 'object' ? body.atribuicao : {};
 
   /* Os dois CRMs rodam em paralelo e um não derruba o outro. O visitante vê
      sucesso se pelo menos um gravou: a falha do outro fica no log da Vercel
      (procure por [lead:ac] ou [lead:techlithy]). */
   const [okAC, okTL] = await Promise.all([
-    temAC ? enviarAC({ dados, digitos, utm, base, chave }) : Promise.resolve(null),
-    temTL ? enviarTechLithy({ dados, digitos, utm, conta: tlConta, token: tlToken }) : Promise.resolve(null),
+    temAC ? enviarAC({ dados, digitos, utm, atribuicao, base, chave }) : Promise.resolve(null),
+    temTL ? enviarTechLithy({ dados, digitos, utm, atribuicao, conta: tlConta, token: tlToken }) : Promise.resolve(null),
   ]);
 
   console.log('[lead]', { ac: okAC, techlithy: okTL, unidade: dados.unidade, turma: dados.turma, origem: body.origemPagina || '-' });

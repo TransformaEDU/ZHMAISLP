@@ -233,5 +233,83 @@ async function executar(body, env = BASE, opts = {}) {
     console.log('ok  sem UTM a URL do webhook vai limpa');
   }
 
+  /* --------------------------------------------------- Atribuição --- */
+
+  {
+    /* O contrato atual: a página manda primeira e última origem já separadas.
+       Os dois precisam chegar ao CRM — a primeira responde "qual campanha
+       apresentou a escola a esta família" e a última, "o que trouxe ela no dia
+       em que se inscreveu". */
+    const atribuicao = {
+      first_utm_source: 'google', first_utm_medium: 'cpc', first_utm_campaign: 'marca',
+      first_utm_content: 'anuncio-a', first_utm_term: 'colegio', first_fbclid: 'FB1',
+      first_gclid: 'GC1', first_msclkid: 'MS1',
+      last_utm_source: 'ig', last_utm_medium: 'paid_social', last_utm_campaign: 'bolsao',
+      last_utm_content: 'anuncio-b', last_utm_term: 'bolsa', last_fbclid: 'FB2',
+      last_gclid: 'GC2', last_msclkid: 'MS2',
+    };
+    const { res, chamadas } = await executar({ ...leadValido, atribuicao }, AMBOS);
+    assert.strictEqual(res.code, 200);
+    const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+    const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [String(f.field), f.value]));
+
+    assert.strictEqual(campos['74'], 'google', 'first_utm_source');
+    assert.strictEqual(campos['75'], 'cpc', 'first_utm_medium');
+    assert.strictEqual(campos['76'], 'marca', 'first_utm_campaign');
+    assert.strictEqual(campos['77'], 'anuncio-a', 'first_utm_content');
+    assert.strictEqual(campos['78'], 'colegio', 'first_utm_term');
+    assert.strictEqual(campos['79'], 'FB1', 'first_fbclid');
+    assert.strictEqual(campos['80'], 'GC1', 'first_gclid');
+    assert.strictEqual(campos['81'], 'MS1', 'first_msclkid');
+
+    assert.strictEqual(campos['82'], 'ig', 'last_utm_source');
+    assert.strictEqual(campos['83'], 'paid_social', 'last_utm_medium');
+    assert.strictEqual(campos['84'], 'bolsao', 'last_utm_campaign');
+    assert.strictEqual(campos['85'], 'anuncio-b', 'last_utm_content');
+    assert.strictEqual(campos['86'], 'bolsa', 'last_utm_term');
+    assert.strictEqual(campos['87'], 'FB2', 'last_fbclid');
+    assert.strictEqual(campos['88'], 'GC2', 'last_gclid');
+    assert.strictEqual(campos['89'], 'MS2', 'last_msclkid');
+
+    assert.strictEqual(campos['58'], 'ig', 'o campo Utm Source antigo recebe a ÚLTIMA origem');
+
+    /* Um id de campo repetido no fieldValues é comportamento indefinido no
+       ActiveCampaign: o valor que fica é loteria. */
+    const ids = sync.corpo.contact.fieldValues.map((f) => String(f.field));
+    assert.strictEqual(new Set(ids).size, ids.length, 'nenhum campo pode ser enviado duas vezes');
+
+    const tl = chamadas.find((c) => c.url.includes('crm.techlithy.com'));
+    assert.strictEqual(new URL(tl.url).searchParams.get('utm_source'), 'ig', 'o CRM recebe a última origem');
+    console.log('ok  atribuição grava os 16 campos, primeira e última origem');
+  }
+
+  {
+    /* Página em cache depois do deploy continua mandando só `utm`. Enquanto
+       ela existir por aí, o lead não pode perder a origem. */
+    const { chamadas } = await executar({ ...leadValido, utm: { utm_source: 'instagram', utm_medium: 'social' } }, AMBOS);
+    const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+    const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [String(f.field), f.value]));
+    assert.strictEqual(campos['82'], 'instagram', 'contrato antigo ainda alimenta a última origem');
+    assert.strictEqual(campos['83'], 'social');
+    assert.strictEqual(campos['58'], 'instagram');
+    assert.ok(!('74' in campos), 'sem atribuição não se inventa primeira origem');
+    const tl = chamadas.find((c) => c.url.includes('crm.techlithy.com'));
+    assert.strictEqual(new URL(tl.url).searchParams.get('utm_source'), 'instagram');
+    console.log('ok  contrato antigo (só utm) continua funcionando');
+  }
+
+  {
+    /* Atribuição corrompida nunca pode derrubar a inscrição: perde-se a
+       origem da lead, jamais a lead. */
+    const { res } = await executar({ ...leadValido, atribuicao: 'lixo' }, AMBOS);
+    assert.strictEqual(res.code, 200, 'atribuição inválida não invalida o lead');
+
+    const { chamadas } = await executar({ ...leadValido, atribuicao: { last_utm_source: '   ' } }, AMBOS);
+    const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+    const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [String(f.field), f.value]));
+    assert.ok(!('82' in campos), 'valor vazio não é enviado: apagaria o que já estava gravado');
+    console.log('ok  atribuição inválida ou vazia não quebra nem apaga nada');
+  }
+
   console.log('\ntodos os testes passaram');
 })().catch((e) => { console.error('\nFALHOU:', e.message); process.exit(1); });

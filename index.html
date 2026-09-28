@@ -1706,21 +1706,121 @@ fbq('track','PageView');
 
   /* ---------- Envio ---------- */
 
-  /* Os parâmetros de campanha são lidos uma vez, na chegada, e guardados na
-     sessão: a pessoa costuma rolar a página antes de abrir o formulário, e o
-     histórico pode ter perdido a query original até lá. */
-  const utm = (() => {
-    const p = new URLSearchParams(location.search);
-    const atual = {};
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid']
-      .forEach(k => { const v = p.get(k); if (v) atual[k] = v.slice(0, 200); });
-    try {
-      const guardado = JSON.parse(sessionStorage.getItem('zh_utm') || '{}');
-      const valor = Object.keys(atual).length ? atual : guardado;
-      sessionStorage.setItem('zh_utm', JSON.stringify(valor));
-      return valor;
-    } catch { return atual; }
+  /* Atribuição de campanha: captura, persistência e leitura.
+
+     Guarda em localStorage, não em sessionStorage: entre o clique no anúncio e
+     a inscrição costumam passar dias, e sessionStorage morre ao fechar a aba —
+     era exatamente o primeiro toque que se perdia ali.
+
+     Guarda dois toques. O PRIMEIRO é imutável depois de definido: é a campanha
+     que apresentou a escola à família. O ÚLTIMO acompanha a visita mais
+     recente: é a campanha que trouxe a pessoa no dia em que ela se inscreveu.
+     Os dois respondem perguntas diferentes e por isso vão os dois. */
+  const atribuicao = (() => {
+    const PARAMETROS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid', 'msclkid'];
+    const CHAVE = 'zh:infantil:atribuicao';
+    const LIMITE = 200;
+
+    /* Navegador sem storage (aba anônima, cookies bloqueados) não pode derrubar
+       o formulário. Cai para memória: vale só nesta visita, mas nada quebra. */
+    let memoria = null;
+
+    /* Macro que a plataforma de anúncio não substituiu, tipo {{campaign.name}}.
+       Acontece quando alguém copia o link do gerenciador e abre direto no
+       navegador: a Meta só troca a macro pelo valor real quando o clique passa
+       pelo redirecionamento dela. Gravar isso é pior do que não gravar nada —
+       polui relatório e ocupa o primeiro toque, que não se desfaz. Aceita a
+       forma crua e a percent-encoded, que é como o navegador reescreve a URL
+       colada na barra de endereço. */
+    const temMacro = (s) => {
+      const n = String(s || '').toLowerCase();
+      return n.indexOf('{{') >= 0 || n.indexOf('}}') >= 0 || n.indexOf('%7b%7b') >= 0 || n.indexOf('%7d%7d') >= 0;
+    };
+
+    /* Remove caracteres de controle, que o ActiveCampaign recusa, e corta no
+       tamanho de um campo de texto. */
+    const limpar = (valor) => {
+      if (!valor) return '';
+      let saida = '';
+      const bruto = String(valor);
+      for (let i = 0; i < bruto.length; i++) {
+        const codigo = bruto.charCodeAt(i);
+        saida += (codigo < 32 || codigo === 127) ? ' ' : bruto.charAt(i);
+      }
+      return saida.trim().slice(0, LIMITE);
+    };
+
+    const lerParametros = (busca) => {
+      const p = new URLSearchParams(busca);
+      const achados = {};
+      PARAMETROS.forEach((nome) => {
+        /* getAll, não get: o mesmo parâmetro pode vir repetido. O caso real é o
+           `fbclid` fixo no template do anúncio somado ao `fbclid` de verdade
+           que a Meta anexa no clique — pegar o primeiro descartaria o token
+           real. Vale o último aproveitável. */
+        const validos = p.getAll(nome)
+          .map(limpar)
+          /* Valor igual ao nome do parâmetro (`fbclid=fbclid`) é engano de
+             configuração do anúncio, nunca dado real. */
+          .filter((v) => v && !temMacro(v) && v.toLowerCase() !== nome);
+        const valor = validos[validos.length - 1];
+        if (valor) achados[nome] = valor;
+      });
+      return achados;
+    };
+
+    const ler = () => {
+      try {
+        const bruto = localStorage.getItem(CHAVE);
+        if (!bruto) return memoria;
+        const dados = JSON.parse(bruto);
+        return (dados && dados.versao === 1) ? dados : memoria;
+      } catch (e) { return memoria; }
+    };
+
+    const gravar = (registro) => {
+      memoria = registro;
+      try { localStorage.setItem(CHAVE, JSON.stringify(registro)); } catch (e) { /* storage cheio ou indisponível */ }
+    };
+
+    let registro = ler();
+
+    /* Link do gerenciador com macro por substituir é teste manual, não clique
+       real: a visita inteira é ignorada, inclusive os parâmetros fixos que
+       vieram junto. Registrar o pedaço válido roubaria o último toque e, num
+       navegador novo, travaria o primeiro para sempre.
+
+       Visita sem parâmetro nenhum também não mexe em nada: é o acesso direto,
+       o QR code impresso e o retorno pelo histórico. */
+    if (!temMacro(location.search)) {
+      const parametros = lerParametros(location.search);
+      if (Object.keys(parametros).length) {
+        const toque = Object.assign({}, parametros, { capturadoEm: new Date().toISOString() });
+        registro = {
+          versao: 1,
+          first: (registro && registro.first) || toque,
+          last: toque,
+        };
+        gravar(registro);
+      }
+    }
+
+    const primeiro = (registro && registro.first) || {};
+    const ultimo = (registro && registro.last) || {};
+
+    /* `campos` é o que o servidor grava no CRM. `utm` mantém o contrato antigo
+       (só a última origem), que o servidor ainda aceita. */
+    const campos = {};
+    const utm = {};
+    PARAMETROS.forEach((nome) => {
+      if (primeiro[nome]) campos['first_' + nome] = primeiro[nome];
+      if (ultimo[nome]) { campos['last_' + nome] = ultimo[nome]; utm[nome] = ultimo[nome]; }
+    });
+
+    return { campos, utm };
   })();
+
+  const utm = atribuicao.utm;
 
   async function submit() {
     if (sending) return;
@@ -1739,7 +1839,8 @@ fbq('track','PageView');
           consentimento: $('#i-consent').checked,
           website: $('#i-website').value,
           origemPagina: origemAtual,
-          utm
+          utm,
+          atribuicao: atribuicao.campos
         })
       });
       const j = await r.json().catch(() => null);
