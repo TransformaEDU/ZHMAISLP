@@ -311,5 +311,121 @@ async function executar(body, env = BASE, opts = {}) {
     console.log('ok  atribuição inválida ou vazia não quebra nem apaga nada');
   }
 
+  /* ----------------------------------------------- Catálogo de turmas --- */
+
+  {
+    /* O catálogo completo do ZH+ vale nas duas páginas, Infantil e Bolsão.
+       Cada turma que a planilha lista para uma unidade precisa passar; cada
+       combinação que não existe precisa ser recusada antes de tocar o CRM.
+       A tabela abaixo é a especificação, escrita aqui de propósito em vez de
+       importada da rota: um teste que lê a própria lista do código não pega
+       erro na lista. */
+    const CATALOGO = {
+      "Icaraí": [
+        "Infantil N1",
+        "Infantil N2",
+        "Infantil N3",
+        "Infantil N4",
+        "Infantil N5",
+        "1º Ano - Ensino Fundamental Anos Iniciais",
+        "2º Ano - Ensino Fundamental Anos Iniciais",
+        "3º Ano - Ensino Fundamental Anos Iniciais",
+        "4º Ano - Ensino Fundamental Anos Iniciais",
+        "5º Ano - Ensino Fundamental Anos Iniciais",
+        "6º Ano - Ensino Fundamental Anos Finais",
+        "7º Ano - Ensino Fundamental Anos Finais",
+        "8º Ano - Ensino Fundamental Anos Finais",
+        "9º Ano - Escolas Técnicas e Militares (Master)",
+        "1ª Série - Ensino Médio",
+        "2ª Série - Ensino Médio",
+        "3ª Série - Ensino Médio",
+        "Pré-Vestibular"
+      ],
+      "Méier": [
+        "1º Ano - Ensino Fundamental Anos Iniciais",
+        "2º Ano - Ensino Fundamental Anos Iniciais",
+        "3º Ano - Ensino Fundamental Anos Iniciais",
+        "4º Ano - Ensino Fundamental Anos Iniciais",
+        "5º Ano - Ensino Fundamental Anos Iniciais",
+        "5º Ano - Especializado",
+        "6º Ano - Ensino Fundamental Anos Finais",
+        "7º Ano - Ensino Fundamental Anos Finais",
+        "8º Ano - Ensino Fundamental Anos Finais",
+        "9º Ano - Especializado",
+        "1ª Série - Ensino Médio",
+        "1ª Série Militar - Ensino Médio",
+        "2ª Série - Ensino Médio"
+      ],
+      "Vila Isabel": [
+        "1º Ano - Ensino Fundamental Anos Iniciais",
+        "2º Ano - Ensino Fundamental Anos Iniciais",
+        "3º Ano - Ensino Fundamental Anos Iniciais",
+        "4º Ano - Ensino Fundamental Anos Iniciais",
+        "5º Ano - Ensino Fundamental Anos Iniciais",
+        "6º Ano - Ensino Fundamental Anos Finais",
+        "7º Ano - Ensino Fundamental Anos Finais",
+        "8º Ano - Ensino Fundamental Anos Finais",
+        "9º Ano - Ensino Fundamental Anos Finais",
+        "1ª Série - Ensino Médio"
+      ]
+    };
+    let aceitas = 0;
+    for (const [unidade, turmas] of Object.entries(CATALOGO)) {
+      for (const turma of turmas) {
+        const { res } = await executar({ ...leadValido, unidade, turma });
+        assert.strictEqual(res.code, 200, `${turma} em ${unidade} deveria ser aceita`);
+        aceitas++;
+      }
+    }
+
+    const INEXISTENTES = [
+      ['Méier', 'Infantil N3'],
+      ['Vila Isabel', 'Infantil N1'],
+      ['Vila Isabel', '2ª Série - Ensino Médio'],
+      ['Vila Isabel', '3ª Série - Ensino Médio'],
+      ['Méier', '3ª Série - Ensino Médio'],
+      ['Méier', 'Pré-Vestibular'],
+      ['Vila Isabel', 'Pré-Vestibular'],
+      ['Icaraí', '5º Ano - Especializado'],
+      ['Icaraí', '9º Ano - Especializado'],
+      ['Icaraí', '1ª Série Militar - Ensino Médio'],
+      ['Vila Isabel', '9º Ano - Escolas Técnicas e Militares (Master)'],
+      /* Em Icaraí o 9º ano grava a turma Master, segundo a planilha. */
+      ['Icaraí', '9º Ano - Ensino Fundamental Anos Finais'],
+      /* Rótulo da planilha que não existe no ActiveCampaign. */
+      ['Méier', '1ª Série Militar - Ensino Médio Militar'],
+    ];
+    for (const [unidade, turma] of INEXISTENTES) {
+      const { res, chamadas } = await executar({ ...leadValido, unidade, turma });
+      assert.strictEqual(res.code, 400, `${turma} em ${unidade} não existe e deveria ser recusada`);
+      assert.strictEqual(chamadas.length, 0, `${turma} em ${unidade}: recusa antes de chamar qualquer CRM`);
+    }
+    console.log(`ok  catálogo completo: ${aceitas} combinações aceitas, ${INEXISTENTES.length} inexistentes recusadas`);
+  }
+
+  {
+    /* Com o catálogo completo nas duas páginas, o segmento (campo 46) não pode
+       mais ser fixo por página: sai da turma escolhida. */
+    const casos = [
+      ['Icaraí', 'Infantil N2', 'Infantil'],
+      ['Méier', '5º Ano - Especializado', 'Fundamental 1'],
+      ['Vila Isabel', '4º Ano - Ensino Fundamental Anos Iniciais', 'Fundamental 1'],
+      ['Vila Isabel', '7º Ano - Ensino Fundamental Anos Finais', 'Fundamental 2'],
+      ['Méier', '9º Ano - Especializado', 'Fundamental 2'],
+      ['Icaraí', '9º Ano - Escolas Técnicas e Militares (Master)', 'Fundamental 2'],
+      ['Méier', '1ª Série Militar - Ensino Médio', 'Ensino Médio'],
+      ['Icaraí', '3ª Série - Ensino Médio', 'Ensino Médio'],
+      ['Icaraí', 'Pré-Vestibular', 'Pré-Vestibular'],
+    ];
+    for (const [unidade, turma, segmento] of casos) {
+      const { chamadas } = await executar({ ...leadValido, unidade, turma });
+      const sync = chamadas.find((c) => c.url.includes('/contact/sync'));
+      const campos = Object.fromEntries(sync.corpo.contact.fieldValues.map((f) => [String(f.field), f.value]));
+      assert.strictEqual(campos['12'], turma, `turma vai com o rótulo exato do campo 12: ${turma}`);
+      assert.strictEqual(campos['46'], segmento, `${turma} deveria ser do segmento ${segmento}`);
+    }
+    console.log('ok  segmento sai da turma: Infantil, Fund 1, Fund 2, Médio e Pré-Vestibular');
+  }
+
   console.log('\ntodos os testes passaram');
 })().catch((e) => { console.error('\nFALHOU:', e.message); process.exit(1); });

@@ -1330,8 +1330,12 @@ fbq('track','PageView');
           <h3>Para qual turma é o interesse?</h3>
           <p class="q__help">Selecione o ano ou série que seu filho vai cursar em 2027.</p>
 
-          <!-- Turmas do segmento Infantil ao 5º Ano, produto ZH+.
-               data-uni lista as unidades que oferecem cada turma, separadas por "|".
+          <!-- Catálogo completo de turmas do ZH+, o mesmo nas páginas do Infantil e
+               do Bolsão. data-uni lista as unidades que oferecem cada turma,
+               separadas por "|"; o formulário esconde o que não existe na unidade
+               escolhida e os grupos que ficarem vazios. data-val é o rótulo exato do
+               campo "Turma (de interesse)" do ActiveCampaign. O servidor revalida a
+               combinação em api/lead.js — as duas listas andam juntas.
                Fonte: TURMAS/form-zh-todas-unidades-turmas.xlsx. -->
           <div class="group">
             <span class="group__label">Educação Infantil</span>
@@ -1355,6 +1359,36 @@ fbq('track','PageView');
               <button type="button" class="chip" data-val="5º Ano - Especializado" data-uni="Méier" data-advance>5º ano · Especializado</button>
             </div>
           </div>
+
+          <div class="group">
+            <span class="group__label">Fundamental · Anos finais</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="6º Ano - Ensino Fundamental Anos Finais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>6º ano</button>
+              <button type="button" class="chip" data-val="7º Ano - Ensino Fundamental Anos Finais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>7º ano</button>
+              <button type="button" class="chip" data-val="8º Ano - Ensino Fundamental Anos Finais" data-uni="Icaraí|Méier|Vila Isabel" data-advance>8º ano</button>
+              <button type="button" class="chip" data-val="9º Ano - Escolas Técnicas e Militares (Master)" data-uni="Icaraí" data-advance>9º ano</button>
+              <button type="button" class="chip" data-val="9º Ano - Ensino Fundamental Anos Finais" data-uni="Vila Isabel" data-advance>9º ano</button>
+              <button type="button" class="chip" data-val="9º Ano - Especializado" data-uni="Méier" data-advance>9º ano · Especializado</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <span class="group__label">Ensino Médio</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="1ª Série - Ensino Médio" data-uni="Icaraí|Méier|Vila Isabel" data-advance>1ª série</button>
+              <button type="button" class="chip" data-val="1ª Série Militar - Ensino Médio" data-uni="Méier" data-advance>1ª série militar</button>
+              <button type="button" class="chip" data-val="2ª Série - Ensino Médio" data-uni="Icaraí|Méier" data-advance>2ª série</button>
+              <button type="button" class="chip" data-val="3ª Série - Ensino Médio" data-uni="Icaraí" data-advance>3ª série</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <span class="group__label">Pré-vestibular</span>
+            <div class="chips">
+              <button type="button" class="chip" data-val="Pré-Vestibular" data-uni="Icaraí" data-advance>Pré-vestibular</button>
+            </div>
+          </div>
+
           <p class="err" id="err-turma"><svg aria-hidden="true"><use href="#alert"/></svg> Selecione a turma de interesse.</p>
         </section>
 

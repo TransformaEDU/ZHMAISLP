@@ -81,20 +81,96 @@ const TAG_NOME = 'LP Infantil ao 5º Ano - ZH+ 2027';
 const FONTE    = 'Formulário - Externo';
 const CAMPANHA = 'Infantil / Fund 1';
 
-/* Oferta real por unidade. Espelha a planilha oficial de turmas e existe para
-   que um cliente adulterado não consiga injetar combinação inexistente no CRM:
-   a Educação Infantil só existe em Icaraí, e o 5º Especializado só no Méier. */
-const FUND1 = [
-  '1º Ano - Ensino Fundamental Anos Iniciais',
-  '2º Ano - Ensino Fundamental Anos Iniciais',
-  '3º Ano - Ensino Fundamental Anos Iniciais',
-  '4º Ano - Ensino Fundamental Anos Iniciais',
-  '5º Ano - Ensino Fundamental Anos Iniciais',
-];
+/* Catálogo de turmas do ZH+ por unidade, o mesmo nas páginas do Infantil e do
+   Bolsão. A lista existe para que um cliente adulterado não injete combinação
+   inexistente no CRM, e cada valor é o rótulo exato de uma opção do campo
+   "Turma (de interesse)" do ActiveCampaign.
+
+   Fonte: tabela enviada pela escola em 02/10/2026, igual à planilha oficial
+   TURMAS/form-zh-todas-unidades-turmas.xlsx. Dois ajustes conscientes:
+   - A série militar do Méier aparece na planilha como "1ª Série Militar -
+     Ensino Médio Militar", rótulo que não existe no ActiveCampaign. Aqui vai o
+     da opção 67, "1ª Série Militar - Ensino Médio".
+   - O 9º ano de Icaraí segue a coluna "valor enviado" da planilha e grava a
+     turma "9º Ano - Escolas Técnicas e Militares (Master)".
+
+   Esta lista anda junto com o data-uni dos botões do index.html: mudar só um
+   dos dois faz a página oferecer uma turma que o servidor recusa. */
 const TURMAS_POR_UNIDADE = {
-  'Icaraí':      ['Infantil N1', 'Infantil N2', 'Infantil N3', 'Infantil N4', 'Infantil N5', ...FUND1],
-  'Méier':       [...FUND1, '5º Ano - Especializado'],
-  'Vila Isabel': [...FUND1],
+  'Icaraí': [
+    'Infantil N1',
+    'Infantil N2',
+    'Infantil N3',
+    'Infantil N4',
+    'Infantil N5',
+    '1º Ano - Ensino Fundamental Anos Iniciais',
+    '2º Ano - Ensino Fundamental Anos Iniciais',
+    '3º Ano - Ensino Fundamental Anos Iniciais',
+    '4º Ano - Ensino Fundamental Anos Iniciais',
+    '5º Ano - Ensino Fundamental Anos Iniciais',
+    '6º Ano - Ensino Fundamental Anos Finais',
+    '7º Ano - Ensino Fundamental Anos Finais',
+    '8º Ano - Ensino Fundamental Anos Finais',
+    '9º Ano - Escolas Técnicas e Militares (Master)',
+    '1ª Série - Ensino Médio',
+    '2ª Série - Ensino Médio',
+    '3ª Série - Ensino Médio',
+    'Pré-Vestibular',
+  ],
+  'Méier': [
+    '1º Ano - Ensino Fundamental Anos Iniciais',
+    '2º Ano - Ensino Fundamental Anos Iniciais',
+    '3º Ano - Ensino Fundamental Anos Iniciais',
+    '4º Ano - Ensino Fundamental Anos Iniciais',
+    '5º Ano - Ensino Fundamental Anos Iniciais',
+    '5º Ano - Especializado',
+    '6º Ano - Ensino Fundamental Anos Finais',
+    '7º Ano - Ensino Fundamental Anos Finais',
+    '8º Ano - Ensino Fundamental Anos Finais',
+    '9º Ano - Especializado',
+    '1ª Série - Ensino Médio',
+    '1ª Série Militar - Ensino Médio',
+    '2ª Série - Ensino Médio',
+  ],
+  'Vila Isabel': [
+    '1º Ano - Ensino Fundamental Anos Iniciais',
+    '2º Ano - Ensino Fundamental Anos Iniciais',
+    '3º Ano - Ensino Fundamental Anos Iniciais',
+    '4º Ano - Ensino Fundamental Anos Iniciais',
+    '5º Ano - Ensino Fundamental Anos Iniciais',
+    '6º Ano - Ensino Fundamental Anos Finais',
+    '7º Ano - Ensino Fundamental Anos Finais',
+    '8º Ano - Ensino Fundamental Anos Finais',
+    '9º Ano - Ensino Fundamental Anos Finais',
+    '1ª Série - Ensino Médio',
+  ],
+};
+
+/* Segmento (campo 46) de cada turma. Antes cada página mandava um segmento
+   fixo; com o catálogo completo nas duas, ele passa a sair da turma. */
+const SEGMENTO_DA_TURMA = {
+  'Infantil N1': 'Infantil',
+  'Infantil N2': 'Infantil',
+  'Infantil N3': 'Infantil',
+  'Infantil N4': 'Infantil',
+  'Infantil N5': 'Infantil',
+  '1º Ano - Ensino Fundamental Anos Iniciais': 'Fundamental 1',
+  '2º Ano - Ensino Fundamental Anos Iniciais': 'Fundamental 1',
+  '3º Ano - Ensino Fundamental Anos Iniciais': 'Fundamental 1',
+  '4º Ano - Ensino Fundamental Anos Iniciais': 'Fundamental 1',
+  '5º Ano - Ensino Fundamental Anos Iniciais': 'Fundamental 1',
+  '5º Ano - Especializado': 'Fundamental 1',
+  '6º Ano - Ensino Fundamental Anos Finais': 'Fundamental 2',
+  '7º Ano - Ensino Fundamental Anos Finais': 'Fundamental 2',
+  '8º Ano - Ensino Fundamental Anos Finais': 'Fundamental 2',
+  '9º Ano - Escolas Técnicas e Militares (Master)': 'Fundamental 2',
+  '9º Ano - Ensino Fundamental Anos Finais': 'Fundamental 2',
+  '9º Ano - Especializado': 'Fundamental 2',
+  '1ª Série - Ensino Médio': 'Ensino Médio',
+  '1ª Série Militar - Ensino Médio': 'Ensino Médio',
+  '2ª Série - Ensino Médio': 'Ensino Médio',
+  '3ª Série - Ensino Médio': 'Ensino Médio',
+  'Pré-Vestibular': 'Pré-Vestibular',
 };
 
 /* "O candidato vem de escola" e "Colégio atual" saíram do formulário por
@@ -196,7 +272,7 @@ async function enviarAC({ dados, digitos, utm, atribuicao, base, chave }) {
     campo(CAMPO.responsavel, dados.responsavel),
     campo(CAMPO.fonte, FONTE),
     campo(CAMPO.campanha, CAMPANHA),
-    campo(CAMPO.segmento, dados.turma.startsWith('Infantil') ? 'Infantil' : 'Fundamental 1'),
+    campo(CAMPO.segmento, SEGMENTO_DA_TURMA[dados.turma]),
   ];
 
   /* Campos opcionais entram só quando vêm preenchidos. Mandar string vazia
