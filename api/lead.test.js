@@ -179,6 +179,7 @@ async function executar(body, env = BASE, opts = {}) {
     assert.strictEqual(u.pathname, '/webhook/lead-intake/' + TL.TECHLITHY_ACCOUNT_ID, 'uuid da conta vai no caminho');
     assert.strictEqual(u.searchParams.get('utm_source'), 'instagram', 'utm_source vai na query');
     assert.ok(!('utm_source' in tl.corpo), 'utm_source não pode ir no corpo');
+    assert.strictEqual(u.searchParams.get('utm_campaign'), 'matriculas', 'utm_campaign também vai na query');
     assert.strictEqual(tl.headers.Authorization, 'Bearer lsk_teste');
     assert.strictEqual(tl.headers['Content-Type'], 'application/json');
     assert.strictEqual(tl.headers.Origin, 'https://infantil.zhmais.com.br', 'CRM confere a origem');
@@ -224,6 +225,24 @@ async function executar(body, env = BASE, opts = {}) {
     assert.strictEqual(res.code, 200);
     assert.ok(chamadas.every((c) => c.url.includes('crm.techlithy.com')), 'sem env do AC, só o TechLithy é chamado');
     console.log('ok  só com as variáveis do TechLithy a rota funciona');
+  }
+
+  {
+    /* Aviso da gestora de CRM em 06/10/2026: só a origem chegava ao TechLithy.
+       As cinco UTMs do último toque vão na query. */
+    const atribuicao = {
+      first_utm_source: 'google',
+      last_utm_source: 'fb', last_utm_medium: 'paid', last_utm_campaign: '[27][MEIER] [LEAD] BOLSAO',
+      last_utm_content: '[VIDEO] Depoimento', last_utm_term: 'pais 30-45',
+    };
+    const { chamadas } = await executar({ ...leadValido, atribuicao }, AMBOS);
+    const q = new URL(chamadas.find((c) => c.url.includes('crm.techlithy.com')).url).searchParams;
+    assert.strictEqual(q.get('utm_source'), 'fb', 'último toque, não o primeiro');
+    assert.strictEqual(q.get('utm_medium'), 'paid');
+    assert.strictEqual(q.get('utm_campaign'), '[27][MEIER] [LEAD] BOLSAO', 'colchetes e espaços voltam iguais');
+    assert.strictEqual(q.get('utm_content'), '[VIDEO] Depoimento');
+    assert.strictEqual(q.get('utm_term'), 'pais 30-45');
+    console.log('ok  TechLithy recebe as cinco UTMs do último toque');
   }
 
   {

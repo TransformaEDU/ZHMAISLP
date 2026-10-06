@@ -407,8 +407,13 @@ async function enviarTechLithy({ dados, digitos, utm, atribuicao, conta, token, 
   const url = new URL(TL_BASE + encodeURIComponent(conta));
   /* A última origem é a que interessa aqui: é a campanha que trouxe a pessoa
      desta vez. O `utm` legado cobre a página em cache. */
-  const origem = texto(atribuicao.last_utm_source || utm.utm_source, 200);
-  if (origem) url.searchParams.set('utm_source', origem);
+  /* As cinco UTMs, que o lead do TechLithy tem como atribuição nativa
+     (Origem, Mídia, Campanha, Conteúdo e Termo). Até 06/10/2026 só ia o
+     utm_source e o CRM ficava sem campanha. */
+  for (const nome of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+    const valor = texto(atribuicao['last_' + nome] || utm[nome], 200);
+    if (valor) url.searchParams.set(nome, valor);
+  }
 
   const corpo = payloadTechLithy({ dados, digitos });
   const ctrl = new AbortController();
