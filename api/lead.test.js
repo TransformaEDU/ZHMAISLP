@@ -234,6 +234,7 @@ async function executar(body, env = BASE, opts = {}) {
       first_utm_source: 'google',
       last_utm_source: 'fb', last_utm_medium: 'paid', last_utm_campaign: '[27][MEIER] [LEAD] BOLSAO',
       last_utm_content: '[VIDEO] Depoimento', last_utm_term: 'pais 30-45',
+      last_utm_id: '120210000000001', last_fbclid: 'IwAR-teste',
     };
     const { chamadas } = await executar({ ...leadValido, atribuicao }, AMBOS);
     const q = new URL(chamadas.find((c) => c.url.includes('crm.techlithy.com')).url).searchParams;
@@ -242,6 +243,8 @@ async function executar(body, env = BASE, opts = {}) {
     assert.strictEqual(q.get('utm_campaign'), '[27][MEIER] [LEAD] BOLSAO', 'colchetes e espaços voltam iguais');
     assert.strictEqual(q.get('utm_content'), '[VIDEO] Depoimento');
     assert.strictEqual(q.get('utm_term'), 'pais 30-45');
+    assert.strictEqual(q.get('utm_id'), '120210000000001', 'utm_id (id da campanha) vai na query');
+    assert.strictEqual(q.get('fbclid'), 'IwAR-teste', 'fbclid vai na query');
     console.log('ok  TechLithy recebe as cinco UTMs do último toque');
   }
 

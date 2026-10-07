@@ -410,7 +410,9 @@ async function enviarTechLithy({ dados, digitos, utm, atribuicao, conta, token, 
   /* As cinco UTMs, que o lead do TechLithy tem como atribuição nativa
      (Origem, Mídia, Campanha, Conteúdo e Termo). Até 06/10/2026 só ia o
      utm_source e o CRM ficava sem campanha. */
-  for (const nome of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+  /* Desde 06/10/2026 também utm_id, gclid e fbclid, que o CRM grava. Com
+     gclid e fbclid juntos, o CRM fica com o gclid. */
+  for (const nome of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id', 'gclid', 'fbclid']) {
     const valor = texto(atribuicao['last_' + nome] || utm[nome], 200);
     if (valor) url.searchParams.set(nome, valor);
   }
